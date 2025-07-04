@@ -4,15 +4,15 @@ import { UserAPI } from "../../../URLS/Masters";
 
 const UserList = () => {
    const [users, setUsers] = AVTUseState<User[]>("UserList", []);
-const user: User = {
-  Id: 0,
-  Name: "",
-  Email: "",
-  PhoneNumber: "",
-  Password: "",
-  DateOfBirth: '1998-05-01T00:00:00Z',
-  Address:"",
-};
+// const user: User = {
+//   Id: 0,
+//   Name: "",
+//   Email: "",
+//   PhoneNumber: "",
+//   Password: "",
+//   DateOfBirth: '1998-05-01T00:00:00Z',
+//   Address:"",
+// };
   const loadUsers = async () => {
     const result = await API.GET<User[]>(UserAPI.GET_ALL);
     //await API.POST<User>(UserAPI.CREATE,user)

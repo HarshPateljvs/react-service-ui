@@ -10,6 +10,7 @@ export function AVTUseState<T>(
   initialValue: T | (() => T)
 ): [T, React.Dispatch<React.SetStateAction<T>>] {
   const [state, setState] = useState<T>(() => {
+    
     const value = typeof initialValue === 'function' ? (initialValue as () => T)() : initialValue;
     if (HookLoggerConfig.ENABLE_LOGGING) {
       console.log(`[AVTUseState][Init][${key}]`, value);
