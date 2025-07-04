@@ -8,6 +8,7 @@ export function AVTUseEffect(
 ): void {
   useEffect(() => {
     if (HookLoggerConfig.ENABLE_LOGGING) {
+      console.log("-------------",deps)
       console.log(`[AVTUseEffect][${effectName}] Mounted`);
     }
 
