@@ -1,6 +1,10 @@
 import React from "react";
-import { DataGrid } from "@mui/x-data-grid";
-import type { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  type GridColDef,
+  type GridRenderCellParams,
+  type GridRowModel,
+} from "@mui/x-data-grid";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -8,7 +12,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { AVTUseEffect, AVTUseState } from "../../customHooks";
 import { API } from "../../services/API/api";
 
-// 🔶 Global filter format
 export interface FilterDto {
   PageNo: number;
   PageSize: number;
@@ -17,14 +20,16 @@ export interface FilterDto {
 
 type CommonGridProps<T> = {
   apiUrl: string;
+  updateUrl?: string; // API URL to send PUT update
   showEdit?: boolean;
   showDelete?: boolean;
   onEditClick?: (row: T) => void;
   onDeleteClick?: (row: T) => void;
 };
 
-function CommonGrid<T extends { Id?: string | number; id?: string | number }>({
+function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
   apiUrl,
+  updateUrl,
   showEdit = false,
   showDelete = false,
   onEditClick,
@@ -46,15 +51,14 @@ function CommonGrid<T extends { Id?: string | number; id?: string | number }>({
     };
 
     try {
-      // ⛳ API returns plain array like: T[]
       const response = await API.POST<T[]>(apiUrl, filter);
       const data = response ?? [];
 
-      // 🧱 Generate columns from object keys
       const baseColumns: GridColDef[] = Object.keys(data[0] || {}).map((key) => ({
         field: key,
         headerName: key,
         flex: 1,
+        editable: true, // ✅ Enable inline edit
       }));
 
       if (showEdit || showDelete) {
@@ -90,6 +94,19 @@ function CommonGrid<T extends { Id?: string | number; id?: string | number }>({
     }
   };
 
+  // ✅ Handle inline update
+  const processRowUpdate = async (updatedRow: GridRowModel) => {
+    if (!updateUrl) return updatedRow;
+
+    try {
+      await API.PUT(updateUrl, updatedRow);
+      return updatedRow;
+    } catch (err) {
+      console.error("Update failed", err);
+      throw err;
+    }
+  };
+
   AVTUseEffect(
     "CommonGrid-load",
     () => {
@@ -111,6 +128,7 @@ function CommonGrid<T extends { Id?: string | number; id?: string | number }>({
         loading={loading}
         pagination
         getRowId={(row) => row.Id ?? row.id}
+        processRowUpdate={processRowUpdate} // ✅ Inline update handler
       />
     </div>
   );
