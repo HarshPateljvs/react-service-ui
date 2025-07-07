@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import "./App.css";
 import Layout from "./Library/Components/Common/Layout";
 import UserList from "./Components/Master/User/UserList";
-import Demoredux from "./Components/Master/User/demoredux";
+import Demoredux from "./Components/Master/User/Demoredux";
 
 function App() {
   return (
