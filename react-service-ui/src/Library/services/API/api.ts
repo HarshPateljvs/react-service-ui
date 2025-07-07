@@ -10,7 +10,7 @@ export const API = {
   POST: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
     handleApiResponse<T>(axiosInstance.post<APIBaseResponse<T>>(url, data, config), data),
 
-  PUT: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+  PUT: <T>(url: string, data?: unknown, config?:   AxiosRequestConfig) =>
     handleApiResponse<T>(axiosInstance.put<APIBaseResponse<T>>(url, data, config), data),
 
   PATCH: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>

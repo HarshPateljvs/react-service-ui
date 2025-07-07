@@ -1,26 +1,64 @@
-import { useSelector } from "react-redux";
+
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { AppRoutes } from "../../../Components/Master/User/Routes/AppRoutes";
 import { selectCurrentUser } from "../../../redux/user/userSelectors";
+
+
+
+const flattenRoutesForNavbar = (): NavRoute[] => {
+  const result: NavRoute[] = [];
+
+  AppRoutes.forEach((route) => {
+      if (route.children && route.children.length > 0) {
+      route.children.forEach((child) => {
+        if (child.showInNavbar && child.label) {
+          result.push({
+            path: `/${child.path}`,
+            label: child.label,
+          });
+        }
+      });
+    }
+    else if (route.showInNavbar && route.label) {
+      result.push({
+        path: route.path,
+        label: route.label,
+      });
+    }
+  });
+
+  return result;
+};
 
 const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const navLinks = flattenRoutesForNavbar();
+
   return (
-    <nav className="bg-gray-100 px-4 py-2 flex gap-4 shadow-sm">
-      <Link to="/" className="hover:text-blue-600 font-medium">
-        Home
-      </Link>
-      <Link to="/users" className="hover:text-blue-600 font-medium">
-        Users
-      </Link>
-      <Link to="/demoredux" className="hover:text-blue-600 font-medium">
-        Demoredux
-      </Link>
-      {currentUser && (
-        <span className="text-sm text-gray-700 font-semibold">
-          Welcome, {currentUser.email}
-        </span>
-      )}
-    </nav>
+    <AppBar position="static" color="default" elevation={1}>
+      <Toolbar sx={{ display: "flex", gap: 2 }}>
+        {navLinks.map((route) => (
+          <Button
+            key={route.path}
+            component={Link}
+            to={route.path}
+            color="inherit"
+          >
+            {route.label}
+          </Button>
+        ))}
+
+        {currentUser && (
+          <Box ml={2}>
+            <Typography variant="body2">
+              Welcome, <strong>{currentUser.Email}</strong>
+            </Typography>
+          </Box>
+        )}
+      </Toolbar>
+    </AppBar>
   );
 };
 
