@@ -22,12 +22,10 @@ declare global {
         password: string;
     }
     interface LoginResponse {
-        token: string;
-        user: {
-            id: number;
-            name: string;
-            email: string;
-        };
+        Token: string;
+        Name: string;
+        Email: string;
+        User: User;
     }
     interface AppRoute {
         path: string;
@@ -35,6 +33,7 @@ declare global {
         children?: AppRoute[];
         showInNavbar?: boolean;
         label?: string;
+        allowedRoles?: UserRole[];
     }
     interface Predicate {
         Key: string;
@@ -46,7 +45,9 @@ declare global {
         PageSize: number;
     }
     /*****************************///////////-----InterFace-----///////////////////*********************/
-
+    /*****************************///////////-----ENUMS-----///////////////////*********************/
+   
+    /*****************************///////////-----ENUMS-----///////////////////*********************/
 }
 export { };
 
