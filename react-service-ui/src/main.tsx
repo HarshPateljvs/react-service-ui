@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
-import RouteLoader from "./Components/Master/User/Routes/RouteLoader.tsx";
+import RouteLoader from "./Components/Routes/RouteLoader.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <>

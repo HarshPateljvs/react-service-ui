@@ -1,6 +1,6 @@
 import axios, { AxiosHeaders } from 'axios';
 import { GlobalHeaders } from './GlobalHeaders';
-import { AuthService } from '../../../Components/Master/User/Routes/AuthService';
+import { AuthService } from '../../../Components/Routes/AuthService';
 
 const axiosInstance = axios.create({
   headers: GlobalHeaders,

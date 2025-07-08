@@ -5,10 +5,9 @@ import CommonInput from "../Form/CommonInput";
 import CommonButton from "../Form/CommonButton";
 import { setUser } from "../../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import { UserRole } from "../../../Components/Master/User/Routes/UserRole";
-import { AuthService } from "../../../Components/Master/User/Routes/AuthService";
+import { UserRole } from "../../../Components/Routes/UserRole";
+import { AuthService } from "../../../Components/Routes/AuthService";
 import Register from "./Register";
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = AVTUseState("login_email", "");
@@ -20,7 +19,6 @@ const Login = () => {
   const [showRegister, setShowRegister] = AVTUseState("show_register", false);
 
   const dispatch = useDispatch();
-  const naviage = useNavigate();
   const handleLogin = async () => {
     const payload: LoginRequest = { email, password };
     const response = await API.POST<LoginResponse>(AuthAPI.LOGIN, payload);

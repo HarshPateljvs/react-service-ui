@@ -3,15 +3,15 @@ import { UserRole } from "./UserRole";
 import ProtectedRoute from "./ProtectedRoute";
 
 const Layout = lazy(
-  () => import("../../../../Library/Components/Common/Layout")
+  () => import("../../Library/Components/Common/Layout")
 );
-const Login = lazy(() => import("../../../../Library/Components/Common/Login"));
-const Demoredux = lazy(() => import("../Demoredux"));
-const UserList = lazy(() => import("../UserList"));
-const AdminDashboard = lazy(() => import("../../Other/AdminDashboard"));
-const TeacherPanel = lazy(() => import("../../Other/TeacherPanel"));
-const StudentHome = lazy(() => import("../../Other/StudentHome"));
-const EmployeeList = lazy(() => import("../../Employee/EmployeeList"));
+const Login = lazy(() => import("../../Library/Components/Common/Login"));
+const Demoredux = lazy(() => import("../Master/User/Demoredux"));
+const UserList = lazy(() => import("../Master/User/UserList"));
+const AdminDashboard = lazy(() => import("../Master/Other/AdminDashboard"));
+const TeacherPanel = lazy(() => import("../Master/Other/TeacherPanel"));
+const StudentHome = lazy(() => import("../Master/Other/StudentHome"));
+const EmployeeList = lazy(() => import("../Master/Employee/EmployeeList"));
 
 export const AppRoutes: AppRoute[] = [
   {

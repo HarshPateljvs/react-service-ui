@@ -1,9 +1,9 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { AppRoutes } from "../../../Components/Master/User/Routes/AppRoutes";
+import { AppRoutes } from "../../../Components/Routes/AppRoutes";
 import CommonButton from "../Form/CommonButton";
-import type { UserRole } from "../../../Components/Master/User/Routes/UserRole";
-import { AuthService } from "../../../Components/Master/User/Routes/AuthService";
+import type { UserRole } from "../../../Components/Routes/UserRole";
+import { AuthService } from "../../../Components/Routes/AuthService";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelectors";
 

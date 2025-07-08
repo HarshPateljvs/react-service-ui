@@ -1,6 +1,6 @@
 import "./App.css";
-import AppRouter from "./Components/Master/User/Routes/AppRouter";
-import { AuthService } from "./Components/Master/User/Routes/AuthService";
+import AppRouter from "./Components/Routes/AppRouter";
+import { AuthService } from "./Components/Routes/AuthService";
 
 function App() {
   
