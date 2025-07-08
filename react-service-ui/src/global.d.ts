@@ -52,6 +52,13 @@ declare global {
         PageNumber: number;
         PageSize: number;
     }
+    interface Employee {
+        id?: number;
+        name: string;
+        email: string;
+        department: string;
+        role: string;
+    }
     /*****************************///////////-----InterFace-----///////////////////*********************/
     /*****************************///////////-----ENUMS-----///////////////////*********************/
 

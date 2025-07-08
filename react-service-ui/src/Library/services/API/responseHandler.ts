@@ -46,7 +46,7 @@ export async function handleApiResponse<T>(
     if (axiosError?.response?.status === 401) {
       ToastService.WARNING("Unauthorized. Redirecting to login...");
       localStorage.clear(); // Clear token/session
-      window.location.href = "/login"; // Redirect to login
+      window.location.href = "/"; // Redirect to login
       return {} as T; // Return empty object to satisfy return type
     }
     if (axiosError?.response?.data) {

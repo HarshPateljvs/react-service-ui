@@ -27,7 +27,7 @@ const Login = () => {
       localStorage.setItem("access_token", response.Token);
       AuthService.setRole(selectedRole as UserRole);
       dispatch(setUser(response.AppUser));
-       window.location.href = "/Home";
+       window.location.href = "/Dashboard";
       //naviage("/Dashboard");
     }
   };
