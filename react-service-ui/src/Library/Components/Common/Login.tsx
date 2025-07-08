@@ -4,20 +4,29 @@ import { API } from "../../../Library/services/API/api";
 import { AuthAPI } from "../../../URLS/Masters";
 import CommonInput from "../Form/CommonInput";
 import CommonButton from "../Form/CommonButton";
+import { setUser } from "../../../redux/user/userSlice";
+import { useDispatch } from "react-redux";
+import { UserRole } from "../../../Components/Master/User/Routes/UserRole";
 
 const Login = () => {
   const [email, setEmail] = AVTUseState("login_email", "");
   const [password, setPassword] = AVTUseState("login_password", "");
-  const navigate = useNavigate();
+  const [selectedRole, setSelectedRole] = AVTUseState<UserRole | "">(
+    "login_role",
+    ""
+  );
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const handleLogin = async () => {
     const payload: LoginRequest = { email, password };
     const response = await API.POST<LoginResponse>(AuthAPI.LOGIN, payload);
     console.log(response);
     if (response != null) {
-      localStorage.setItem("token", response.token);
-
-      navigate("/users");
+      localStorage.setItem("access_token", response.Token);
+        localStorage.setItem("user_role", selectedRole);
+      dispatch(setUser(response.User));
+      navigate("/Home");
     }
   };
 
@@ -41,7 +50,17 @@ const Login = () => {
         placeholder="Password"
         required
       />
-      <CommonButton  onClick={handleLogin}>Login</CommonButton>
+      <select
+        className="w-full border p-2 rounded mt-4"
+        value={selectedRole}
+        onChange={(e) => setSelectedRole(e.target.value as UserRole)}
+      >
+        <option value="">Select Role</option>
+        <option value={UserRole.Admin}>Admin</option>
+        <option value={UserRole.Teacher}>Teacher</option>
+        <option value={UserRole.Student}>Student</option>
+      </select>
+      <CommonButton onClick={handleLogin}>Login</CommonButton>
     </div>
   );
 };

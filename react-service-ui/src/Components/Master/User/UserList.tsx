@@ -6,7 +6,6 @@ const UserList = () => {
     <CommonGrid<User>
       apiUrl={UserAPI.GET_ALL}
       updateUrl={UserAPI.UPDATE}
-      showEdit
       showDelete
       onEditClick={(user) => console.log("Edit user:", user)}
       onDeleteClick={(user) => console.log("Delete user:", user)}

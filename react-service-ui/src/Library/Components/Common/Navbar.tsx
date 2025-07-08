@@ -1,27 +1,34 @@
-
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { AppRoutes } from "../../../Components/Master/User/Routes/AppRoutes";
+import CommonButton from "../Form/CommonButton";
+import type { UserRole } from "../../../Components/Master/User/Routes/UserRole";
+import { AuthService } from "../../../Components/Master/User/Routes/AuthService";
+import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelectors";
 
-
-
 const flattenRoutesForNavbar = (): NavRoute[] => {
+  const userRole = AuthService.getRole(); // ✅ Get role from AuthService
   const result: NavRoute[] = [];
 
   AppRoutes.forEach((route) => {
-      if (route.children && route.children.length > 0) {
+    if (route.children?.length) {
       route.children.forEach((child) => {
-        if (child.showInNavbar && child.label) {
+        const allowed =
+          !child.allowedRoles ||
+          child.allowedRoles.includes(userRole as UserRole);
+        if (child.showInNavbar && child.label && allowed) {
           result.push({
-            path: `/${child.path}`,
+            path: `${route.path}/${child.path}`,
             label: child.label,
           });
         }
       });
-    }
-    else if (route.showInNavbar && route.label) {
+    } else if (
+      route.showInNavbar &&
+      route.label &&
+      (!route.allowedRoles || route.allowedRoles.includes(userRole as UserRole))
+    ) {
       result.push({
         path: route.path,
         label: route.label,
@@ -33,8 +40,11 @@ const flattenRoutesForNavbar = (): NavRoute[] => {
 };
 
 const Navbar = () => {
-  const currentUser = useSelector(selectCurrentUser);
   const navLinks = flattenRoutesForNavbar();
+  const currentUser = useSelector(selectCurrentUser);
+  const handleLogout = () => {
+    AuthService.logout(); // ✅ Use AuthService
+  };
 
   return (
     <AppBar position="static" color="default" elevation={1}>
@@ -50,11 +60,12 @@ const Navbar = () => {
           </Button>
         ))}
 
-        {currentUser && (
-          <Box ml={2}>
+        {AuthService.isAuthenticated() && currentUser && (
+          <Box ml="auto" display="flex" alignItems="center" gap={2}>
             <Typography variant="body2">
-              Welcome, <strong>{currentUser.Email}</strong>
+              Welcome, <strong>{currentUser.Name || currentUser.Email}</strong>
             </Typography>
+            <CommonButton onClick={handleLogout}>Logout</CommonButton>
           </Box>
         )}
       </Toolbar>

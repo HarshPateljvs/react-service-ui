@@ -41,20 +41,24 @@ export async function handleApiResponse<T>(
 
     return result.Data;
   } catch (err: unknown) {
-   // 👇 If it's an AxiosError and has a response, handle gracefully
+    // 👇 If it's an AxiosError and has a response, handle gracefully
     const axiosError = err as AxiosError<APIBaseResponse<T>>;
-
+    if (axiosError?.response?.status === 401) {
+      ToastService.WARNING("Unauthorized. Redirecting to login...");
+      localStorage.clear(); // Clear token/session
+      window.location.href = "/login"; // Redirect to login
+      return {} as T; // Return empty object to satisfy return type
+    }
     if (axiosError?.response?.data) {
       const result = axiosError.response.data;
-
       if (HookLoggerConfig.ENABLE_LOGGING) {
         console.error('[API Error Response]', result);
       }
 
-      result.ErrorMessage?.forEach((msg: string)=> ToastService.ERROR(msg));
-      result.InfoMessage?.forEach((msg: string)=> ToastService.INFO(msg));
-      result.WarningMessage?.forEach((msg: string)=> ToastService.WARNING(msg));
-      result.ValidationMessage?.forEach((msg: string)=> ToastService.ERROR(msg));
+      result.ErrorMessage?.forEach((msg: string) => ToastService.ERROR(msg));
+      result.InfoMessage?.forEach((msg: string) => ToastService.INFO(msg));
+      result.WarningMessage?.forEach((msg: string) => ToastService.WARNING(msg));
+      result.ValidationMessage?.forEach((msg: string) => ToastService.ERROR(msg));
 
       if (result.HasError) {
         ToastService.ERROR('API returned error(s).');
