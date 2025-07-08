@@ -1,6 +1,5 @@
 // src/Library/Routes/AppRouter.tsx
 import { Routes, Route, Navigate } from "react-router-dom";
-import { Routes, Route, Navigate } from "react-router-dom";
 import { AppRoutes } from "./AppRoutes";
 import { Suspense } from "react";
 import RouteLoader from "./RouteLoader";
