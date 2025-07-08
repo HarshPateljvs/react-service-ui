@@ -18,8 +18,47 @@ export const AppRoutes: AppRoute[] = [
   },
   {
     path: "/Home",
+    element: <Login />,
+  },
+  {
+    path: "/Home",
     element: <Layout />,
     children: [
+      {
+        path: "users",
+        element: <UserList />,
+        showInNavbar: true,
+        label: "Users",
+        allowedRoles: [UserRole.Admin]
+      },  
+      {
+        path: "demoredux",
+        element: <Demoredux />,
+        showInNavbar: true,
+        label: "Redux Demo",
+        allowedRoles: [UserRole.Admin, UserRole.Teacher],
+      },
+      {
+        path: "admin-dashboard",
+        element: <AdminDashboard />,
+        showInNavbar: true,
+        label: "Admin Dashboard",
+        allowedRoles: [UserRole.Admin],
+      },
+      {
+        path: "teacher-panel",
+        element: <TeacherPanel />,
+        showInNavbar: true,
+        label: "Teacher Panel",
+        allowedRoles: [UserRole.Teacher],
+      },
+      {
+        path: "student-home",
+        element: <StudentHome />,
+        showInNavbar: true,
+        label: "Student Home",
+        allowedRoles: [UserRole.Student],
+      },
       {
         path: "users",
         element: <UserList />,
