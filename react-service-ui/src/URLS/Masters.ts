@@ -8,6 +8,11 @@ export const UserAPI = {
 
 };
 
+export const APPUserAPI = {
+  CREATE: REACTSERVICE+'AppUser',
+};
+
 export const AuthAPI  = {
-  LOGIN: REACTSERVICE+'Login',
+  LOGIN: REACTSERVICE+'Auth/Login',
+  REGISTER: REACTSERVICE+'Auth/Register',
 };

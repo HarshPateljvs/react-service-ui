@@ -1,8 +1,6 @@
 // src/Library/Components/Common/Form/CommonInput.tsx
 import React from "react";
 import TextField from "@mui/material/TextField";
-import { ToastService } from "../../services/toastService";
-import { AVTUseState } from "../../customHooks";
 
 type CommonInputProps = {
   name: string;
@@ -11,6 +9,7 @@ type CommonInputProps = {
   placeholder?: string;
   type?: string;
   required?: boolean;
+  validateTrigger?: boolean; // 🔍 trigger validation externally
 };
 
 const CommonInput: React.FC<CommonInputProps> = ({
@@ -20,17 +19,10 @@ const CommonInput: React.FC<CommonInputProps> = ({
   placeholder = "",
   type = "text",
   required = false,
+  validateTrigger = false,
 }) => {
-  const [touched, setTouched] = AVTUseState("CommonInput ->" + name, false);
-
-  const handleBlur = () => {
-    setTouched(true);
-    if (required && !value.trim()) {
-      ToastService.INFO(
-        `${name.charAt(0).toUpperCase() + name.slice(1)} is required`
-      );
-    }
-  };
+  const hasError = required && validateTrigger && !value.trim();
+  const formattedLabel = placeholder || name;
 
   return (
     <TextField
@@ -39,12 +31,14 @@ const CommonInput: React.FC<CommonInputProps> = ({
       type={type}
       value={value}
       onChange={onChange}
-      onBlur={handleBlur}
-      placeholder={placeholder}
-      label={placeholder}
+      placeholder={formattedLabel}
+      label={formattedLabel}
       variant="outlined"
       size="small"
       margin="normal"
+      error={hasError}
+      helperText={hasError ? `${formattedLabel} is required` : ""}
+      autoComplete="off"
     />
   );
 };

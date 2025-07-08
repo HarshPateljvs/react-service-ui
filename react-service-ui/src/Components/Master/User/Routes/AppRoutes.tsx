@@ -1,5 +1,6 @@
 import { lazy } from "react";
 import { UserRole } from "./UserRole";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Layout = lazy(
   () => import("../../../../Library/Components/Common/Layout")
@@ -10,6 +11,7 @@ const UserList = lazy(() => import("../UserList"));
 const AdminDashboard = lazy(() => import("../../Other/AdminDashboard"));
 const TeacherPanel = lazy(() => import("../../Other/TeacherPanel"));
 const StudentHome = lazy(() => import("../../Other/StudentHome"));
+const EmployeeList = lazy(() => import("../../Employee/EmployeeList"));
 
 export const AppRoutes: AppRoute[] = [
   {
@@ -17,8 +19,21 @@ export const AppRoutes: AppRoute[] = [
     element: <Login />,
   },
   {
-    path: "/Home",
-    element: <Login />,
+    path: "/Dashboard",
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        path: "employee",
+        element: <EmployeeList />,
+        showInNavbar: true,
+        label: "Employee",
+        allowedRoles: [UserRole.Admin],
+      },
+    ],
   },
   {
     path: "/Home",
@@ -27,70 +42,70 @@ export const AppRoutes: AppRoute[] = [
       {
         path: "users",
         element: <UserList />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Users",
-        allowedRoles: [UserRole.Admin]
-      },  
+        allowedRoles: [UserRole.Admin],
+      },
       {
         path: "demoredux",
         element: <Demoredux />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Redux Demo",
         allowedRoles: [UserRole.Admin, UserRole.Teacher],
       },
       {
         path: "admin-dashboard",
         element: <AdminDashboard />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Admin Dashboard",
         allowedRoles: [UserRole.Admin],
       },
       {
         path: "teacher-panel",
         element: <TeacherPanel />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Teacher Panel",
         allowedRoles: [UserRole.Teacher],
       },
       {
         path: "student-home",
         element: <StudentHome />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Student Home",
         allowedRoles: [UserRole.Student],
       },
       {
         path: "users",
         element: <UserList />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Users",
-        allowedRoles: [UserRole.Admin]
-      },  
+        allowedRoles: [UserRole.Admin],
+      },
       {
         path: "demoredux",
         element: <Demoredux />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Redux Demo",
         allowedRoles: [UserRole.Admin, UserRole.Teacher],
       },
       {
         path: "admin-dashboard",
         element: <AdminDashboard />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Admin Dashboard",
         allowedRoles: [UserRole.Admin],
       },
       {
         path: "teacher-panel",
         element: <TeacherPanel />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Teacher Panel",
         allowedRoles: [UserRole.Teacher],
       },
       {
         path: "student-home",
         element: <StudentHome />,
-        showInNavbar: true,
+        showInNavbar: false,
         label: "Student Home",
         allowedRoles: [UserRole.Student],
       },

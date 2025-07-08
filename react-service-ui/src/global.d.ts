@@ -17,6 +17,13 @@ declare global {
         DateOfBirth: string; // Date as ISO string from API
         Address?: string; // optional because it's nullable on backend
     }
+    interface AppUser {
+        FirstName: string;
+        LastName: string;
+        Email: string;
+        PhoneNumber: string;
+        Password: string;
+    }
     interface LoginRequest {
         email: string;
         password: string;
@@ -26,6 +33,7 @@ declare global {
         Name: string;
         Email: string;
         User: User;
+        AppUser: AppUser;
     }
     interface AppRoute {
         path: string;
@@ -46,7 +54,7 @@ declare global {
     }
     /*****************************///////////-----InterFace-----///////////////////*********************/
     /*****************************///////////-----ENUMS-----///////////////////*********************/
-   
+
     /*****************************///////////-----ENUMS-----///////////////////*********************/
 }
 export { };

@@ -7,28 +7,36 @@ import { setUser } from "../../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { UserRole } from "../../../Components/Master/User/Routes/UserRole";
 import { AuthService } from "../../../Components/Master/User/Routes/AuthService";
+import Register from "./Register";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = AVTUseState("login_email", "");
   const [password, setPassword] = AVTUseState("login_password", "");
-  const [selectedRole, setSelectedRole] = AVTUseState<UserRole | "">(
+  const [selectedRole, setSelectedRole] = AVTUseState<UserRole | "Admin">(
     "login_role",
-    ""
+    UserRole.Admin
   );
+  const [showRegister, setShowRegister] = AVTUseState("show_register", false);
 
   const dispatch = useDispatch();
+  const naviage = useNavigate();
   const handleLogin = async () => {
     const payload: LoginRequest = { email, password };
     const response = await API.POST<LoginResponse>(AuthAPI.LOGIN, payload);
-    console.log(response);
-    if (response != null) {
+
+    if (response) {
       localStorage.setItem("access_token", response.Token);
       AuthService.setRole(selectedRole as UserRole);
-      dispatch(setUser(response.User));
-     // navigate("/Home");
-      window.location.href = "/Home";
+      dispatch(setUser(response.AppUser));
+       window.location.href = "/Home";
+      //naviage("/Dashboard");
     }
   };
+
+  if (showRegister) {
+    return <Register onBack={() => setShowRegister(false)} />;
+  }
 
   return (
     <div className="p-6 max-w-md mx-auto">
@@ -41,7 +49,6 @@ const Login = () => {
         placeholder="Email"
         required
       />
-
       <CommonInput
         name="password"
         type="password"
@@ -55,12 +62,23 @@ const Login = () => {
         value={selectedRole}
         onChange={(e) => setSelectedRole(e.target.value as UserRole)}
       >
-        <option value="">Select Role</option>
-        <option value={UserRole.Admin}>Admin</option>
+        <option value={UserRole.Admin} selected>
+          Admin
+        </option>
         <option value={UserRole.Teacher}>Teacher</option>
         <option value={UserRole.Student}>Student</option>
       </select>
       <CommonButton onClick={handleLogin}>Login</CommonButton>
+
+      <p className="mt-4 text-sm">
+        Don't have an account?{" "}
+        <span
+          className="text-blue-600 cursor-pointer"
+          onClick={() => setShowRegister(true)}
+        >
+          Register here
+        </span>
+      </p>
     </div>
   );
 };

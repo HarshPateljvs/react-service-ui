@@ -8,23 +8,29 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../../redux/user/userSelectors";
 
 const flattenRoutesForNavbar = (): NavRoute[] => {
-  const userRole = AuthService.getRole(); // ✅ Get role from AuthService
+    const userRole = AuthService.getRole();
   const result: NavRoute[] = [];
 
   AppRoutes.forEach((route) => {
+    const parentPath = route.path;
+
     if (route.children?.length) {
       route.children.forEach((child) => {
         const allowed =
-          !child.allowedRoles ||
-          child.allowedRoles.includes(userRole as UserRole);
+          !child.allowedRoles || child.allowedRoles.includes(userRole as UserRole);
+
         if (child.showInNavbar && child.label && allowed) {
+          const fullPath = `${parentPath}/${child.path}`.replace(/\/+/g, "/"); // remove double slashes
           result.push({
-            path: `${route.path}/${child.path}`,
+            path: fullPath,
             label: child.label,
           });
         }
       });
-    } else if (
+    }
+
+    // Also support top-level routes
+    if (
       route.showInNavbar &&
       route.label &&
       (!route.allowedRoles || route.allowedRoles.includes(userRole as UserRole))
@@ -63,7 +69,7 @@ const Navbar = () => {
         {AuthService.isAuthenticated() && currentUser && (
           <Box ml="auto" display="flex" alignItems="center" gap={2}>
             <Typography variant="body2">
-              Welcome, <strong>{currentUser.Name || currentUser.Email}</strong>
+              Welcome, <strong>{currentUser.FirstName +" "+currentUser.LastName || currentUser.Email}</strong>
             </Typography>
             <CommonButton onClick={handleLogout}>Logout</CommonButton>
           </Box>

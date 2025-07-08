@@ -1,3 +1,3 @@
 export const HookLoggerConfig = {
-    ENABLE_LOGGING: false,
+    ENABLE_LOGGING: true    ,
 };

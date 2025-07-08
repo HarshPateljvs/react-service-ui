@@ -36,7 +36,7 @@ export async function handleApiResponse<T>(
     result.ValidationMessage?.forEach((msg: string) => ToastService.ERROR(msg));
 
     if (result.HasError) {
-      ToastService.ERROR('API returned error(s).');
+      // ToastService.ERROR('API returned error(s).');
     }
 
     return result.Data;
@@ -61,7 +61,7 @@ export async function handleApiResponse<T>(
       result.ValidationMessage?.forEach((msg: string) => ToastService.ERROR(msg));
 
       if (result.HasError) {
-        ToastService.ERROR('API returned error(s).');
+        // ToastService.ERROR('API returned error(s).');
       }
 
       // ✅ Still return the data (or empty)
