@@ -7,6 +7,7 @@ import CommonButton from "../Form/CommonButton";
 import { setUser } from "../../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
 import { UserRole } from "../../../Components/Master/User/Routes/UserRole";
+import { AuthService } from "../../../Components/Master/User/Routes/AuthService";
 
 const Login = () => {
   const [email, setEmail] = AVTUseState("login_email", "");
@@ -16,7 +17,6 @@ const Login = () => {
     ""
   );
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogin = async () => {
     const payload: LoginRequest = { email, password };
@@ -24,9 +24,10 @@ const Login = () => {
     console.log(response);
     if (response != null) {
       localStorage.setItem("access_token", response.Token);
-        localStorage.setItem("user_role", selectedRole);
+      AuthService.setRole(selectedRole as UserRole);
       dispatch(setUser(response.User));
-      navigate("/Home");
+     // navigate("/Home");
+      window.location.href = "/Home";
     }
   };
 

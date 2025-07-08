@@ -4,15 +4,13 @@ import { AppRoutes } from "./AppRoutes";
 import { Suspense } from "react";
 import RouteLoader from "./RouteLoader";
 import { BrowserRouter as Router } from "react-router-dom";
-import { AuthService } from "./AuthService";
+// import { AuthService } from "./AuthService";
 import type { UserRole } from "./UserRole";
+// import { AVTUseEffect, AVTUseState } from "../../../../Library/customHooks";
 
-const renderRoutes = (routes: AppRoute[]): React.ReactNode[] => {
-  const currentRole = AuthService.getRole();
-
+const renderRoutes = (routes: AppRoute[], currentRole: UserRole | null): React.ReactNode[] => {
   return routes.map(({ path, element, children, allowedRoles }) => {
     const isAllowed = !allowedRoles || allowedRoles.includes(currentRole as UserRole);
-
     return (
       <Route
         key={path}
@@ -31,16 +29,26 @@ const renderRoutes = (routes: AppRoute[]): React.ReactNode[] => {
             />
           );
         })}
+        
       </Route>
     );
   });
 };
-
-const AppRouter = () => {
+console.log("-----------",renderRoutes);
+interface AppRouterProps {
+  role: UserRole | null;
+}
+const AppRouter = ({ role }: AppRouterProps) => {
+  //  const [currentRole, setCurrentRole] = AVTUseState<UserRole | null>("AppRouter",null);
+  //  AVTUseEffect("AppRouterEffect",() => {
+    // const role = AuthService.getRole();
+    // console.log("📦 [AppRouter] Loaded role:", role);
+  //   setCurrentRole(role);
+  // }, [currentRole]);
   return (
     <Router>
       <Suspense fallback={<RouteLoader />}>
-        <Routes>{renderRoutes(AppRoutes)}</Routes>
+        <Routes>{renderRoutes(AppRoutes,role)}</Routes>
       </Suspense>
     </Router>
   );

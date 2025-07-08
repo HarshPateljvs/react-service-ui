@@ -10,6 +10,7 @@ const UserList = lazy(() => import("../UserList"));
 const AdminDashboard = lazy(() => import("../../Other/AdminDashboard"));
 const TeacherPanel = lazy(() => import("../../Other/TeacherPanel"));
 const StudentHome = lazy(() => import("../../Other/StudentHome"));
+
 export const AppRoutes: AppRoute[] = [
   {
     path: "/",

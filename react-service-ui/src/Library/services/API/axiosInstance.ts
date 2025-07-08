@@ -1,5 +1,6 @@
 import axios, { AxiosHeaders } from 'axios';
 import { GlobalHeaders } from './GlobalHeaders';
+import { AuthService } from '../../../Components/Master/User/Routes/AuthService';
 
 const axiosInstance = axios.create({
   headers: GlobalHeaders,
@@ -8,7 +9,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('access_token');
+    const token = AuthService.getToken();
 
     // Create a proper AxiosHeaders instance
     const mergedHeaders = new AxiosHeaders({
