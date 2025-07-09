@@ -21,6 +21,7 @@ export interface FilterDto {
 type CommonGridProps<T> = {
   apiUrl: string;
   updateUrl?: string;
+  data?: T[]; 
   showEdit?: boolean;
   showDelete?: boolean;
   onEditClick?: (row: T) => void;
@@ -29,68 +30,58 @@ type CommonGridProps<T> = {
   reloadTrigger?: number;
 };
 
-function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
-  apiUrl,
-  updateUrl,
-  showEdit = false,
-  showDelete = false,
-  onEditClick,
-  onDeleteClick,
-  onAddClick,
-  reloadTrigger,
-}: CommonGridProps<T>) {
+function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
+  {
+    apiUrl,
+    updateUrl,
+    data,
+    showEdit = false,
+    showDelete = false,
+    onEditClick,
+    onDeleteClick,
+    onAddClick,
+    reloadTrigger,
+  }: CommonGridProps<T>
+) {
   const [rows, setRows] = AVTUseState<T[]>("CommonGrid-rows", []);
-  const [columns, setColumns] = AVTUseState<GridColDef[]>(
-    "CommonGrid-cols",
-    []
-  );
+  const [columns, setColumns] = AVTUseState<GridColDef[]>("CommonGrid-cols", []);
   const [page, setPage] = AVTUseState<number>("CommonGrid-page", 0);
-  const [pageSize, setPageSize] = AVTUseState<number>(
-    "CommonGrid-pageSize",
-    10
-  );
-  const [loading, setLoading] = AVTUseState<boolean>(
-    "CommonGrid-loading",
-    false
-  );
-  const [totalCount, setTotalCount] = AVTUseState<number>(
-    "CommonGrid-totalCount",
-    0
-  );
-  AVTUseEffect(
-    "CommonGrid-load",
-    () => {
-      loadData();
-    },
-    [page, pageSize, reloadTrigger]
-  );
+  const [pageSize, setPageSize] = AVTUseState<number>("CommonGrid-pageSize", 10);
+  const [loading, setLoading] = AVTUseState<boolean>("CommonGrid-loading", false);
+  const [totalCount, setTotalCount] = AVTUseState<number>("CommonGrid-totalCount", 0);
+
+  // Load Data from API or passed prop
   const loadData = async () => {
     setLoading(true);
 
-    const filter: FilterDto = {
-      PageNo: page + 1,
-      PageSize: pageSize,
-      Predicates: {},
-    };
-
     try {
-      const response = await API.POST_FULL<T[]>(apiUrl, filter);
-      const data = response.Data ?? [];
+      let fetchedData: T[] = [];
 
-      setTotalCount(response.TotalCount || 0);
-      setRows(data);
+      if (data && Array.isArray(data)) {
+        fetchedData = data;
+      } else {
+        const filter: FilterDto = {
+          PageNo: page + 1,
+          PageSize: pageSize,
+          Predicates: {},
+        };
 
-      // Generate columns from first object (if not already generated)
-      const generatedColumns: GridColDef[] = Object.keys(data[0] || {}).map(
-        (key) => ({
-          field: key,
-          headerName: key,
-          flex: 1,
-          editable: true,
-        })
-      );
+        const response = await API.POST_FULL<T[]>(apiUrl, filter);
+        fetchedData = response.Data ?? [];
+        setTotalCount(response.TotalCount || 0);
+      }
 
-      // Append Actions column if needed
+      setRows(fetchedData);
+
+      // Generate columns even if data is empty
+      const firstRow = fetchedData[0] || {};
+      const generatedColumns: GridColDef[] = Object.keys(firstRow).map((key) => ({
+        field: key,
+        headerName: key,
+        flex: 1,
+        editable: true,
+      }));
+
       if (showEdit || showDelete) {
         generatedColumns.push({
           field: "actions",
@@ -135,13 +126,9 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
     }
   };
 
-  AVTUseEffect(
-    "CommonGrid-load",
-    () => {
-      loadData();
-    },
-    [page, pageSize]
-  );
+  AVTUseEffect("CommonGrid-load", () => {
+    loadData();
+  }, [page, pageSize, reloadTrigger, data]);
 
   return (
     <div style={{ height: 500, width: "100%" }} className="relative mb-2">
@@ -158,7 +145,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
           rows={rows}
           columns={columns}
           rowCount={totalCount}
-          paginationMode="server"
+          paginationMode={data ? "client" : "server"} // ✅ client mode if static list is passed
           paginationModel={{ page, pageSize }}
           onPaginationModelChange={({ page, pageSize }) => {
             setPage(page);

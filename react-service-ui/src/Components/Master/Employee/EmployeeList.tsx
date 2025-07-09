@@ -23,6 +23,7 @@ export default function EmployeeList() {
       setReload(reload + 1);
     }
   };
+  
   return (
     <>
       {showAddForm && (
@@ -43,6 +44,7 @@ export default function EmployeeList() {
         onAddClick={() => setShowAddForm(true)}
         reloadTrigger={reload}
       />
+
     </>
   );
 }
