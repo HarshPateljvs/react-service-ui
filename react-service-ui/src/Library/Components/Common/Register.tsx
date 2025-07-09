@@ -4,6 +4,8 @@ import CommonButton from "../Form/CommonButton";
 import { API } from "../../../Library/services/API/api";
 import { AuthAPI } from "../../../URLS/Masters";
 import { ToastService } from "../../services/toastService";
+import { UserRole } from "../../../Components/Routes/UserRole";
+import CommonEnumDropdown from "../Form/CommonEnumDropdown";
 
 const Register = ({ onBack }: { onBack: () => void }) => {
   const [firstName, setFirstName] = AVTUseState("reg_first_name", "");
@@ -16,6 +18,10 @@ const Register = ({ onBack }: { onBack: () => void }) => {
     ""
   );
   const [validate, setValidate] = AVTUseState("reg_validate", false);
+  const [roleId, setRoleId] = AVTUseState<number>(
+    "reg_role_id",
+    UserRole.Admin
+  ); // Default to Student
 
   const handleRegister = async () => {
     setValidate(true);
@@ -30,6 +36,7 @@ const Register = ({ onBack }: { onBack: () => void }) => {
       Email: email,
       PhoneNumber: phone,
       Password: password,
+      RoleId : roleId
     });
 
     if (response) {
@@ -91,6 +98,12 @@ const Register = ({ onBack }: { onBack: () => void }) => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           validateTrigger={validate}
+        />
+        <CommonEnumDropdown
+          label="Select Role"
+          value={roleId}
+          onChange={(val) => setRoleId(Number(val))}
+          enumObject={UserRole}
         />
       </div>
 

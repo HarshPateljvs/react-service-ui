@@ -23,6 +23,7 @@ declare global {
         Email: string;
         PhoneNumber: string;
         Password: string;
+        RoleId?: number;
     }
     interface LoginRequest {
         email: string;

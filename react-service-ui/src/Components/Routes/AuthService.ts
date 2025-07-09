@@ -6,13 +6,15 @@ import type { UserRole } from "./UserRole";
 export const AuthService = {
   getToken: () => localStorage.getItem("access_token"),
   getRole: (): UserRole => {
-    const role = localStorage.getItem("user_role") as UserRole;
-    console.log("📥 [AuthService] Fetched role:", role); // ✅ log the role
-    return role;
+    const roleId = localStorage.getItem("user_role_id");
+    const parsedId = roleId ? parseInt(roleId, 10) : 0;
+    console.log("📥 [AuthService] Fetched role ID:", parsedId);
+    return parsedId as UserRole;
+
   },
-  setRole: (role: UserRole) => {
-    localStorage.setItem("user_role", role);
-    console.log("seted form the use Role user_role", role);
+  setRole: (roleId: UserRole) => {
+    localStorage.setItem("user_role_id", roleId.toString());
+    console.log("✅ Set role ID in storage:", roleId);
   },
   isAuthenticated: () => !!localStorage.getItem("access_token"),
   logout: () => {

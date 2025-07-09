@@ -33,6 +33,20 @@ export const AppRoutes: AppRoute[] = [
         label: "Employee",
         allowedRoles: [UserRole.Admin],
       },
+      {
+        path: "teacher-panel",
+        element: <TeacherPanel />,
+        showInNavbar: true,
+        label: "Teacher Panel",
+        allowedRoles: [UserRole.Teacher,UserRole.Admin],
+      },
+      {
+        path: "student-home",
+        element: <StudentHome />,
+        showInNavbar: true,
+        label: "Student Home",
+        allowedRoles: [UserRole.Student,UserRole.Admin],
+      },
     ],
   },
   {

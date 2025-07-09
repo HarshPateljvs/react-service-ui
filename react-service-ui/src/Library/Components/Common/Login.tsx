@@ -12,10 +12,6 @@ import Register from "./Register";
 const Login = () => {
   const [email, setEmail] = AVTUseState("login_email", "");
   const [password, setPassword] = AVTUseState("login_password", "");
-  const [selectedRole, setSelectedRole] = AVTUseState<UserRole | "Admin">(
-    "login_role",
-    UserRole.Admin
-  );
   const [showRegister, setShowRegister] = AVTUseState("show_register", false);
 
   const dispatch = useDispatch();
@@ -25,7 +21,7 @@ const Login = () => {
 
     if (response) {
       localStorage.setItem("access_token", response.Token);
-      AuthService.setRole(selectedRole as UserRole);
+      AuthService.setRole(response.AppUser.RoleId as UserRole);
       dispatch(setUser(response.AppUser));
        window.location.href = "/Dashboard";
       //naviage("/Dashboard");
@@ -55,17 +51,6 @@ const Login = () => {
         placeholder="Password"
         required
       />
-      <select
-        className="w-full border p-2 rounded mt-4"
-        value={selectedRole}
-        onChange={(e) => setSelectedRole(e.target.value as UserRole)}
-      >
-        <option value={UserRole.Admin} selected>
-          Admin
-        </option>
-        <option value={UserRole.Teacher}>Teacher</option>
-        <option value={UserRole.Student}>Student</option>
-      </select>
       <CommonButton onClick={handleLogin}>Login</CommonButton>
 
       <p className="mt-4 text-sm">
