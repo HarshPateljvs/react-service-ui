@@ -13,7 +13,6 @@ const Login = () => {
   const [email, setEmail] = AVTUseState("login_email", "");
   const [password, setPassword] = AVTUseState("login_password", "");
   const [showRegister, setShowRegister] = AVTUseState("show_register", false);
-
   const dispatch = useDispatch();
   const handleLogin = async () => {
     const payload: LoginRequest = { email, password };
@@ -24,7 +23,7 @@ const Login = () => {
       AuthService.setRole(response.AppUser.RoleId as UserRole);
       dispatch(setUser(response.AppUser));
        window.location.href = "/Dashboard";
-      //naviage("/Dashboard");
+      //navigate("/Dashboard");
     }
   };
 

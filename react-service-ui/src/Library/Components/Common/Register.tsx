@@ -38,9 +38,7 @@ const Register = ({ onBack }: { onBack: () => void }) => {
       Password: password,
       RoleId : roleId
     });
-
     if (response) {
-      ToastService.SUCCES("User registered successfully");
       onBack();
     }
   };
