@@ -19,7 +19,7 @@ export interface FilterDto {
 
 type CommonGridProps<T> = {
   apiUrl: string;
-  updateUrl?: string; // API URL to send PUT update
+  updateUrl?: string;
   showEdit?: boolean;
   showDelete?: boolean;
   onEditClick?: (row: T) => void;
@@ -39,6 +39,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
   const [page, setPage] = AVTUseState<number>("CommonGrid-page", 0);
   const [pageSize, setPageSize] = AVTUseState<number>("CommonGrid-pageSize", 10);
   const [loading, setLoading] = AVTUseState<boolean>("CommonGrid-loading", false);
+  const [totalCount, setTotalCount] = AVTUseState<number>("CommonGrid-totalCount", 0);
 
   const loadData = async () => {
     setLoading(true);
@@ -50,18 +51,23 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
     };
 
     try {
-      const response = await API.POST<T[]>(apiUrl, filter);
-      const data = response ?? [];
+      const response = await API.POST_FULL<T[]>(apiUrl, filter);
+      const data = response.Data ?? [];
 
-      const baseColumns: GridColDef[] = Object.keys(data[0] || {}).map((key) => ({
+      setTotalCount(response.TotalCount || 0);
+      setRows(data);
+
+      // Generate columns from first object (if not already generated)
+      const generatedColumns: GridColDef[] = Object.keys(data[0] || {}).map((key) => ({
         field: key,
         headerName: key,
         flex: 1,
-        editable: true, // ✅ Enable inline edit
+        editable: true,
       }));
 
+      // Append Actions column if needed
       if (showEdit || showDelete) {
-        baseColumns.push({
+        generatedColumns.push({
           field: "actions",
           headerName: "Actions",
           width: 120,
@@ -84,8 +90,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
         });
       }
 
-      setRows(data);
-      setColumns(baseColumns);
+      setColumns(generatedColumns);
     } catch (error) {
       console.error("CommonGrid API load error:", error);
     } finally {
@@ -93,7 +98,6 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
     }
   };
 
-  // ✅ Handle inline update
   const processRowUpdate = async (updatedRow: GridRowModel) => {
     if (!updateUrl) return updatedRow;
 
@@ -106,19 +110,17 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
     }
   };
 
-  AVTUseEffect(
-    "CommonGrid-load",
-    () => {
-      loadData();
-    },
-    [page, pageSize]
-  );
+  AVTUseEffect("CommonGrid-load", () => {
+    loadData();
+  }, [page, pageSize]);
 
   return (
     <div style={{ height: 500, width: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columns}
+        rowCount={totalCount}
+        paginationMode="server" // ✅ enable server-side pagination
         paginationModel={{ page, pageSize }}
         onPaginationModelChange={({ page, pageSize }) => {
           setPage(page);
@@ -127,7 +129,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
         loading={loading}
         pagination
         getRowId={(row) => row.Id ?? row.id}
-        processRowUpdate={processRowUpdate} // ✅ Inline update handler
+        processRowUpdate={processRowUpdate}
       />
     </div>
   );

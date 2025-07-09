@@ -1,5 +1,5 @@
 import type { AxiosRequestConfig } from 'axios';
-import { handleApiResponse } from './responseHandler';
+import { handleApiResponse, handleFullApiResponse } from './responseHandler';
 import type { APIBaseResponse } from './responseHandler'; // ✅ Import this type
 import axiosInstance from './axiosInstance';
 
@@ -10,7 +10,11 @@ export const API = {
   POST: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
     handleApiResponse<T>(axiosInstance.post<APIBaseResponse<T>>(url, data, config), data),
 
-  PUT: <T>(url: string, data?: unknown, config?:   AxiosRequestConfig) =>
+  // Get full response (for pagination)
+  POST_FULL: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    handleFullApiResponse<T>(axiosInstance.post<APIBaseResponse<T>>(url, data, config), data),
+
+  PUT: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
     handleApiResponse<T>(axiosInstance.put<APIBaseResponse<T>>(url, data, config), data),
 
   PATCH: <T>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
