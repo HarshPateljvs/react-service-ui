@@ -18,6 +18,8 @@ const Register = ({ onBack }: { onBack: () => void }) => {
     ""
   );
   const [validate, setValidate] = AVTUseState("reg_validate", false);
+  const [loading, setLoading] = AVTUseState("reg_loading", false);
+
   const [roleId, setRoleId] = AVTUseState<number>(
     "reg_role_id",
     UserRole.Admin
@@ -25,19 +27,21 @@ const Register = ({ onBack }: { onBack: () => void }) => {
 
   const handleRegister = async () => {
     setValidate(true);
+    if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) return;
     if (password !== confirmPassword) {
-      ToastService.INFO("Passwords do not match");
+      ToastService.INFO("Password and ConfirmPassword do not match");
       return;
     }
-
+    setLoading(true);
     const response = await API.POST<AppUser>(AuthAPI.REGISTER, {
       FirstName: firstName,
       LastName: lastName,
       Email: email,
       PhoneNumber: phone,
       Password: password,
-      RoleId : roleId
+      RoleId: roleId,
     });
+    setLoading(false);
     if (response) {
       onBack();
     }
@@ -101,11 +105,11 @@ const Register = ({ onBack }: { onBack: () => void }) => {
           label="Select Role"
           value={roleId}
           onChange={(val) => setRoleId(Number(val))}
-          enumObject={UserRole}
+          enumObject={UserRole} 
         />
       </div>
 
-      <CommonButton onClick={handleRegister}>Register</CommonButton>
+      <CommonButton onClick={handleRegister} loading={loading}>Register</CommonButton>
 
       <p className="mt-4 text-sm">
         Already have an account?{" "}

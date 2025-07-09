@@ -10,6 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 import { AVTUseEffect, AVTUseState } from "../../customHooks";
 import { API } from "../../services/API/api";
+import CommonButton from "./CommonButton";
 
 export interface FilterDto {
   PageNo: number;
@@ -24,6 +25,8 @@ type CommonGridProps<T> = {
   showDelete?: boolean;
   onEditClick?: (row: T) => void;
   onDeleteClick?: (row: T) => void;
+  onAddClick?: () => void;
+  reloadTrigger?: number;
 };
 
 function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
@@ -33,14 +36,34 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
   showDelete = false,
   onEditClick,
   onDeleteClick,
+  onAddClick,
+  reloadTrigger,
 }: CommonGridProps<T>) {
   const [rows, setRows] = AVTUseState<T[]>("CommonGrid-rows", []);
-  const [columns, setColumns] = AVTUseState<GridColDef[]>("CommonGrid-cols", []);
+  const [columns, setColumns] = AVTUseState<GridColDef[]>(
+    "CommonGrid-cols",
+    []
+  );
   const [page, setPage] = AVTUseState<number>("CommonGrid-page", 0);
-  const [pageSize, setPageSize] = AVTUseState<number>("CommonGrid-pageSize", 10);
-  const [loading, setLoading] = AVTUseState<boolean>("CommonGrid-loading", false);
-  const [totalCount, setTotalCount] = AVTUseState<number>("CommonGrid-totalCount", 0);
-
+  const [pageSize, setPageSize] = AVTUseState<number>(
+    "CommonGrid-pageSize",
+    10
+  );
+  const [loading, setLoading] = AVTUseState<boolean>(
+    "CommonGrid-loading",
+    false
+  );
+  const [totalCount, setTotalCount] = AVTUseState<number>(
+    "CommonGrid-totalCount",
+    0
+  );
+  AVTUseEffect(
+    "CommonGrid-load",
+    () => {
+      loadData();
+    },
+    [page, pageSize, reloadTrigger]
+  );
   const loadData = async () => {
     setLoading(true);
 
@@ -58,12 +81,14 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
       setRows(data);
 
       // Generate columns from first object (if not already generated)
-      const generatedColumns: GridColDef[] = Object.keys(data[0] || {}).map((key) => ({
-        field: key,
-        headerName: key,
-        flex: 1,
-        editable: true,
-      }));
+      const generatedColumns: GridColDef[] = Object.keys(data[0] || {}).map(
+        (key) => ({
+          field: key,
+          headerName: key,
+          flex: 1,
+          editable: true,
+        })
+      );
 
       // Append Actions column if needed
       if (showEdit || showDelete) {
@@ -110,27 +135,41 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
     }
   };
 
-  AVTUseEffect("CommonGrid-load", () => {
-    loadData();
-  }, [page, pageSize]);
+  AVTUseEffect(
+    "CommonGrid-load",
+    () => {
+      loadData();
+    },
+    [page, pageSize]
+  );
 
   return (
-    <div style={{ height: 500, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowCount={totalCount}
-        paginationMode="server" // ✅ enable server-side pagination
-        paginationModel={{ page, pageSize }}
-        onPaginationModelChange={({ page, pageSize }) => {
-          setPage(page);
-          setPageSize(pageSize);
-        }}
-        loading={loading}
-        pagination
-        getRowId={(row) => row.Id ?? row.id}
-        processRowUpdate={processRowUpdate}
-      />
+    <div style={{ height: 500, width: "100%" }} className="relative mb-2">
+      {onAddClick && (
+        <div className="absolute top-0 right-0 z-10">
+          <CommonButton onClick={onAddClick} className="text-sm px-3 py-1">
+            + Add
+          </CommonButton>
+        </div>
+      )}
+
+      <div className="h-full pt-14">
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          rowCount={totalCount}
+          paginationMode="server"
+          paginationModel={{ page, pageSize }}
+          onPaginationModelChange={({ page, pageSize }) => {
+            setPage(page);
+            setPageSize(pageSize);
+          }}
+          loading={loading}
+          pagination
+          getRowId={(row) => row.Id ?? row.id}
+          processRowUpdate={processRowUpdate}
+        />
+      </div>
     </div>
   );
 }

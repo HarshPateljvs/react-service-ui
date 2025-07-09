@@ -9,7 +9,7 @@ type CommonInputProps = {
   placeholder?: string;
   type?: string;
   required?: boolean;
-  validateTrigger?: boolean; // 🔍 trigger validation externally
+  validateTrigger?: boolean;
 };
 
 const CommonInput: React.FC<CommonInputProps> = ({

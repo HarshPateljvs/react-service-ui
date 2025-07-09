@@ -54,11 +54,11 @@ declare global {
         PageSize: number;
     }
     interface Employee {
-        id?: number;
-        name: string;
-        email: string;
-        department: string;
-        role: string;
+        Id?: number;
+        Name: string;
+        Email: string;
+        Department: string;
+        Role: string;
     }
     /*****************************///////////-----InterFace-----///////////////////*********************/
     /*****************************///////////-----ENUMS-----///////////////////*********************/

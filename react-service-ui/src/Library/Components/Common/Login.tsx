@@ -13,16 +13,22 @@ const Login = () => {
   const [email, setEmail] = AVTUseState("login_email", "");
   const [password, setPassword] = AVTUseState("login_password", "");
   const [showRegister, setShowRegister] = AVTUseState("show_register", false);
+  const [validate, setValidate] = AVTUseState("login_validate", false);
+  const [loading, setLoading] = AVTUseState("login_loading", false);
   const dispatch = useDispatch();
   const handleLogin = async () => {
+    setValidate(true);
+    if (!email || !password) return;
+
+    setLoading(true);
     const payload: LoginRequest = { email, password };
     const response = await API.POST<LoginResponse>(AuthAPI.LOGIN, payload);
-
+    setLoading(false);
     if (response) {
       localStorage.setItem("access_token", response.Token);
       AuthService.setRole(response.AppUser.RoleId as UserRole);
       dispatch(setUser(response.AppUser));
-       window.location.href = "/Dashboard";
+      window.location.href = "/Dashboard";
       //navigate("/Dashboard");
     }
   };
@@ -41,6 +47,7 @@ const Login = () => {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email"
         required
+        validateTrigger={validate}
       />
       <CommonInput
         name="password"
@@ -49,8 +56,9 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
         required
+        validateTrigger={validate}
       />
-      <CommonButton onClick={handleLogin}>Login</CommonButton>
+      <CommonButton onClick={handleLogin} loading={loading}>Login</CommonButton>
 
       <p className="mt-4 text-sm">
         Don't have an account?{" "}
