@@ -1,5 +1,6 @@
 import {
   DataGridPro as DataGrid,
+  GridToolbar,
   type GridColDef,
   type GridRenderCellParams,
   type GridRowModel,
@@ -22,6 +23,7 @@ export interface FilterDto {
     Field: string;
     Sort: "asc" | "desc";
   }[];
+  SearchText: string;
 }
 
 type CommonGridProps<T> = {
@@ -68,6 +70,10 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
   );
   const [queryOptions, setQueryOptions] = AVTUseState("queryOptions", {});
   const sortModel = (queryOptions as { sortModel?: GridSortModel })?.sortModel;
+  const [quickFilterText, setQuickFilterText] = AVTUseState<string>(
+    "CommonGrid-quickFilter",
+    ""
+  );
 
   // Load Data from API or passed prop
   const loadData = async () => {
@@ -83,6 +89,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
           PageNo: page + 1,
           PageSize: pageSize,
           Predicates: {},
+          SearchText: quickFilterText,
           SortModels: sortModel
             ?.filter((s) => s.sort === "asc" || s.sort === "desc")
             .map((sort) => ({
@@ -174,7 +181,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
     () => {
       loadData();
     },
-    [page, pageSize, reloadTrigger, data,queryOptions]
+    [page, pageSize, reloadTrigger, data, queryOptions, quickFilterText]
   );
 
   const handleSortModelChange = React.useCallback(
@@ -213,6 +220,17 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
           sortingMode="server"
           filterMode="server"
           onSortModelChange={handleSortModelChange}
+          slots={{ toolbar: GridToolbar }}
+          slotProps={{
+            toolbar: {
+              showQuickFilter: true,
+              quickFilterProps: { debounceMs: 500 },
+              onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+                setQuickFilterText(event.target.value);
+                setPage(0); // reset to first page on search
+              },
+            },
+          }}
         />
       </div>
     </div>
