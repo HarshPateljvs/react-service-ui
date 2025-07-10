@@ -34,7 +34,6 @@ const renderRoutes = (routes: AppRoute[], currentRole: UserRole | null): React.R
     );
   });
 };
-console.log("-----------",renderRoutes);
 interface AppRouterProps {
   role: UserRole | null;
 }
@@ -42,7 +41,6 @@ const AppRouter = ({ role }: AppRouterProps) => {
   //  const [currentRole, setCurrentRole] = AVTUseState<UserRole | null>("AppRouter",null);
   //  AVTUseEffect("AppRouterEffect",() => {
     // const role = AuthService.getRole();
-    // console.log("📦 [AppRouter] Loaded role:", role);
   //   setCurrentRole(role);
   // }, [currentRole]);
   return (

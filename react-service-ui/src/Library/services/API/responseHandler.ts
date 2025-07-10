@@ -100,7 +100,6 @@ export async function handleFullApiResponse<T>(
     if (result.HasError) {
       // ToastService.ERROR('API returned error(s).');
     }
-console.log(result);
     return result;
   } catch (err: unknown) {
     // 👇 If it's an AxiosError and has a response, handle gracefully
