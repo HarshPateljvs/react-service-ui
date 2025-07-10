@@ -1,9 +1,10 @@
 import {
-  DataGrid,
+  DataGridPro as DataGrid,
   type GridColDef,
   type GridRenderCellParams,
   type GridRowModel,
-} from "@mui/x-data-grid";
+  type GridSortModel,
+} from "@mui/x-data-grid-pro";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -11,17 +12,23 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { AVTUseEffect, AVTUseState } from "../../customHooks";
 import { API } from "../../services/API/api";
 import CommonButton from "./CommonButton";
+import React from "react";
 
 export interface FilterDto {
   PageNo: number;
   PageSize: number;
   Predicates: Record<string, string | number | boolean>;
+  SortModels?: {
+    Field: string;
+    Sort: "asc" | "desc";
+  }[];
 }
 
 type CommonGridProps<T> = {
   apiUrl: string;
   updateUrl?: string;
-  data?: T[]; 
+  deleteUrl?: string;
+  data?: T[];
   showEdit?: boolean;
   showDelete?: boolean;
   onEditClick?: (row: T) => void;
@@ -30,25 +37,37 @@ type CommonGridProps<T> = {
   reloadTrigger?: number;
 };
 
-function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
-  {
-    apiUrl,
-    updateUrl,
-    data,
-    showEdit = false,
-    showDelete = false,
-    onEditClick,
-    onDeleteClick,
-    onAddClick,
-    reloadTrigger,
-  }: CommonGridProps<T>
-) {
+function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
+  apiUrl,
+  updateUrl,
+  deleteUrl,
+  data,
+  showEdit = false,
+  showDelete = false,
+  onEditClick,
+  onAddClick,
+  reloadTrigger,
+}: CommonGridProps<T>) {
   const [rows, setRows] = AVTUseState<T[]>("CommonGrid-rows", []);
-  const [columns, setColumns] = AVTUseState<GridColDef[]>("CommonGrid-cols", []);
+  const [columns, setColumns] = AVTUseState<GridColDef[]>(
+    "CommonGrid-cols",
+    []
+  );
   const [page, setPage] = AVTUseState<number>("CommonGrid-page", 0);
-  const [pageSize, setPageSize] = AVTUseState<number>("CommonGrid-pageSize", 10);
-  const [loading, setLoading] = AVTUseState<boolean>("CommonGrid-loading", false);
-  const [totalCount, setTotalCount] = AVTUseState<number>("CommonGrid-totalCount", 0);
+  const [pageSize, setPageSize] = AVTUseState<number>(
+    "CommonGrid-pageSize",
+    10
+  );
+  const [loading, setLoading] = AVTUseState<boolean>(
+    "CommonGrid-loading",
+    false
+  );
+  const [totalCount, setTotalCount] = AVTUseState<number>(
+    "CommonGrid-totalCount",
+    0
+  );
+  const [queryOptions, setQueryOptions] = AVTUseState("queryOptions", {});
+  const sortModel = (queryOptions as { sortModel?: GridSortModel })?.sortModel;
 
   // Load Data from API or passed prop
   const loadData = async () => {
@@ -64,6 +83,12 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
           PageNo: page + 1,
           PageSize: pageSize,
           Predicates: {},
+          SortModels: sortModel
+            ?.filter((s) => s.sort === "asc" || s.sort === "desc")
+            .map((sort) => ({
+              Field: sort.field,
+              Sort: sort.sort as "asc" | "desc",
+            })),
         };
 
         const response = await API.POST_FULL<T[]>(apiUrl, filter);
@@ -75,12 +100,14 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
 
       // Generate columns even if data is empty
       const firstRow = fetchedData[0] || {};
-      const generatedColumns: GridColDef[] = Object.keys(firstRow).map((key) => ({
-        field: key,
-        headerName: key,
-        flex: 1,
-        editable: true,
-      }));
+      const generatedColumns: GridColDef[] = Object.keys(firstRow).map(
+        (key) => ({
+          field: key,
+          headerName: key,
+          flex: 1,
+          editable: true,
+        })
+      );
 
       if (showEdit || showDelete) {
         generatedColumns.push({
@@ -97,7 +124,12 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
                 </IconButton>
               )}
               {showDelete && (
-                <IconButton onClick={() => onDeleteClick?.(params.row)}>
+                <IconButton
+                  onClick={() => {
+                    const confirm = window.confirm("Are you sure to delete?");
+                    if (confirm) handleDelete?.(params.row);
+                  }}
+                >
                   <DeleteIcon color="error" />
                 </IconButton>
               )}
@@ -114,6 +146,17 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
     }
   };
 
+  const handleDelete = async (row: T) => {
+    const id = row.Id ?? row.id;
+    if (!id || !deleteUrl) return;
+
+    try {
+      await API.DELETE(`${deleteUrl}/${id}`);
+      setRows((prev) => prev.filter((r) => (r.Id ?? r.id) !== id));
+    } catch (error) {
+      console.error("Delete Error:", error);
+    }
+  };
   const processRowUpdate = async (updatedRow: GridRowModel) => {
     if (!updateUrl) return updatedRow;
 
@@ -126,9 +169,20 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
     }
   };
 
-  AVTUseEffect("CommonGrid-load", () => {
-    loadData();
-  }, [page, pageSize, reloadTrigger, data]);
+  AVTUseEffect(
+    "CommonGrid-load",
+    () => {
+      loadData();
+    },
+    [page, pageSize, reloadTrigger, data,queryOptions]
+  );
+
+  const handleSortModelChange = React.useCallback(
+    (sortModel: GridSortModel) => {
+      setQueryOptions({ sortModel });
+    },
+    []
+  );
 
   return (
     <div style={{ height: 500, width: "100%" }} className="relative mb-2">
@@ -155,6 +209,10 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>(
           pagination
           getRowId={(row) => row.Id ?? row.id}
           processRowUpdate={processRowUpdate}
+          showToolbar
+          sortingMode="server"
+          filterMode="server"
+          onSortModelChange={handleSortModelChange}
         />
       </div>
     </div>

@@ -23,7 +23,7 @@ export default function EmployeeList() {
       setReload(reload + 1);
     }
   };
-  
+
   return (
     <>
       {showAddForm && (
@@ -39,12 +39,14 @@ export default function EmployeeList() {
       <CommonGrid<Employee>
         apiUrl={EmployeeAPI.GET_ALL}
         updateUrl={EmployeeAPI.UPDATE}
+        deleteUrl={EmployeeAPI.DELETE}
         onEditClick={(user) => console.log("Edit user:", user)}
         onDeleteClick={(user) => console.log("Delete user:", user)}
         onAddClick={() => setShowAddForm(true)}
+        showDelete
         reloadTrigger={reload}
       />
-
+    
     </>
   );
 }

@@ -21,5 +21,7 @@ export const EmployeeAPI = {
   GET_ALL: REACTSERVICE + 'Employee' + '/GetAllEmployees',
   CREATE: REACTSERVICE + 'Employee',
   UPDATE: REACTSERVICE + 'Employee',
+  DELETE: REACTSERVICE + 'Employee',
+
 
 };
