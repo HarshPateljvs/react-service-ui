@@ -106,31 +106,38 @@ function CommonInfiniteGrid<
       setHasLoadedOnce(true);
       const firstRow = [...rows, ...fetchedData][0] || {};
       if (columns.length === 0) {
-        const generatedColumns: GridColDef[] = [
-          {
-            field: "serialNo",
-            headerName: "No.",
-            width: 80,
-            align: "center",
-            headerAlign: "center",
-            sortable: false,
-            filterable: false,
-            renderCell: (params) => {
-              const allRowIds = params.api.getAllRowIds() as (
-                | number
-                | string
-              )[];
-              const index = allRowIds.indexOf(params.id);
-              return index !== -1 ? (index + 1).toString() : "";
-            },
-          },
-          ...Object.keys(firstRow).map((key) => ({
+        // const generatedColumns: GridColDef[] = [
+        //   {
+        //     field: "serialNo",
+        //     headerName: "No.",
+        //     width: 80,
+        //     align: "center",
+        //     headerAlign: "center",
+        //     sortable: false,
+        //     filterable: false,
+        //     renderCell: (params) => {
+        //       const allRowIds = params.api.getAllRowIds() as (
+        //         | number
+        //         | string
+        //       )[];
+        //       const index = allRowIds.indexOf(params.id);
+        //       return index !== -1 ? (index + 1).toString() : "";
+        //     },
+        //   },
+        //   ...Object.keys(firstRow).map((key) => ({
+        //     field: key,
+        //     headerName: key,
+        //     flex: 1,
+        //   })),
+        // ];
+        const generatedColumns: GridColDef[] = Object.keys(firstRow).map(
+          (key) => ({
             field: key,
             headerName: key,
             flex: 1,
-          })),
-        ];
-
+            editable: true,
+          })
+        );
         if (showEdit || showDelete) {
           generatedColumns.push({
             field: "actions",
