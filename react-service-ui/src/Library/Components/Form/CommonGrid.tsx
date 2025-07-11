@@ -214,8 +214,8 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
           getRowId={(row) => row.Id ?? row.id}
           processRowUpdate={processRowUpdate}
           showToolbar
-          sortingMode={data ? "client" : "server"}
-          // filterMode="server"
+          sortingMode="server"
+          filterMode="server"
           pageSizeOptions={[5, 10, 20, 50, { value: -1, label: "All" }]}
           onSortModelChange={handleSortModelChange}
           slots={{ toolbar: GridToolbar }}
