@@ -266,7 +266,7 @@ function CommonInfiniteGrid<
               },
             },
           }}
-          
+          showToolbar
           processRowUpdate={processRowUpdate}
         />
       </div>
