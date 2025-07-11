@@ -56,10 +56,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
     []
   );
   const [page, setPage] = AVTUseState<number>("CommonGrid-page", 0);
-  const [pageSize, setPageSize] = AVTUseState<number>(
-    "CommonGrid-pageSize",
-    10
-  );
+  const [pageSize, setPageSize] = AVTUseState<number>("CommonGrid-pageSize", 5);
   const [loading, setLoading] = AVTUseState<boolean>(
     "CommonGrid-loading",
     false
@@ -206,7 +203,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
           rows={rows}
           columns={columns}
           rowCount={totalCount}
-          paginationMode={data ? "client" : "server"} // ✅ client mode if static list is passed
+          paginationMode={data ? "client" : "server"}
           paginationModel={{ page, pageSize }}
           onPaginationModelChange={({ page, pageSize }) => {
             setPage(page);
@@ -219,6 +216,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
           showToolbar
           sortingMode="server"
           filterMode="server"
+          pageSizeOptions={[5, 10, 20, 50, { value: -1, label: "All" }]}
           onSortModelChange={handleSortModelChange}
           slots={{ toolbar: GridToolbar }}
           slotProps={{
@@ -227,7 +225,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
               quickFilterProps: { debounceMs: 500 },
               onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
                 setQuickFilterText(event.target.value);
-                setPage(0); // reset to first page on search
+                setPage(0);
               },
             },
           }}
