@@ -215,7 +215,7 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
           processRowUpdate={processRowUpdate}
           showToolbar
           sortingMode="server"
-          filterMode="server"
+          // filterMode="server"
           pageSizeOptions={[5, 10, 20, 50, { value: -1, label: "All" }]}
           onSortModelChange={handleSortModelChange}
           slots={{ toolbar: GridToolbar }}
