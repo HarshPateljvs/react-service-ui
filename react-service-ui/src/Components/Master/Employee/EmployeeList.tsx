@@ -1,4 +1,5 @@
 import CommonGrid from "../../../Library/Components/Form/CommonGrid";
+import CommonInfiniteGrid from "../../../Library/Components/Form/CommonInfiniteGrid";
 import { AVTUseState } from "../../../Library/customHooks";
 import { API } from "../../../Library/services/API/api";
 import { EmployeeAPI } from "../../../URLS/Masters";
@@ -16,6 +17,7 @@ export default function EmployeeList() {
       return;
     setLoading(true);
     const response = await API.POST<Employee>(EmployeeAPI.CREATE, newEmp);
+    console.log("api of add respons",response);
     setLoading(false);
     if (response) {
       setNewEmp({});
@@ -40,13 +42,18 @@ export default function EmployeeList() {
         apiUrl={EmployeeAPI.GET_ALL}
         updateUrl={EmployeeAPI.UPDATE}
         deleteUrl={EmployeeAPI.DELETE}
-        onEditClick={(user) => console.log("Edit user:", user)}
-        onDeleteClick={(user) => console.log("Delete user:", user)}
         onAddClick={() => setShowAddForm(true)}
         showDelete
         reloadTrigger={reload}
       />
-    
+      <CommonInfiniteGrid<Employee>
+        apiUrl={EmployeeAPI.GET_ALL}
+        updateUrl={EmployeeAPI.UPDATE}
+        deleteUrl={EmployeeAPI.DELETE}
+        onAddClick={() => setShowAddForm(true)}
+        showDelete
+        reloadTrigger={reload}
+      ></CommonInfiniteGrid>
     </>
   );
 }
