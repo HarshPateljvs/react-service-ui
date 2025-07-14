@@ -28,6 +28,7 @@ export const ChartAPI = {
   LINE_CHART: REACTSERVICE + "Chart/GetLineChartData",
   BAR_CHART: REACTSERVICE + "Chart/GetBarChartData",
   DONUT_CHART: REACTSERVICE + "Chart/GetDonutChartData",
+  PIE_CHART: REACTSERVICE + "Chart/GetPieChartData",
 };
 
 
