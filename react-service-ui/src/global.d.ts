@@ -44,21 +44,32 @@ declare global {
         label?: string;
         allowedRoles?: UserRole[];
     }
-    interface Predicate {
-        Key: string;
-        Value: string | number | boolean;
-    }
-
-    interface FilterDto {
-        PageNumber: number;
-        PageSize: number;
-    }
     interface Employee {
         Id?: number;
         Name: string;
         Email: string;
         Department: string;
         Role: string;
+    }
+
+    interface FilterDto {
+        PageNo: number;
+        PageSize: number;
+        Predicates: Record<string, string | number | boolean>;
+        SortModels?: {
+            Field: string;
+            Sort: "asc" | "desc";
+        }[];
+        SearchText: string;
+    }
+    type CommonChartType = 'line' | 'bar' | 'pie' | 'area' | 'doughnut' | 'radar';
+    interface CommonChart {
+        type: CommonChartType;
+        apiUrl: string;
+        title?: string;
+        height?: string;
+        width?: string;
+
     }
     /*****************************///////////-----InterFace-----///////////////////*********************/
     /*****************************///////////-----ENUMS-----///////////////////*********************/

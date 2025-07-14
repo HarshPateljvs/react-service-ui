@@ -22,6 +22,12 @@ export const EmployeeAPI = {
   CREATE: REACTSERVICE + 'Employee',
   UPDATE: REACTSERVICE + 'Employee',
   DELETE: REACTSERVICE + 'Employee',
-
-
 };
+
+export const ChartAPI = {
+  LINE_CHART: REACTSERVICE + "Chart/GetLineChartData",
+  BAR_CHART: REACTSERVICE + "Chart/GetBarChartData",
+  DONUT_CHART: REACTSERVICE + "Chart/GetDonutChartData",
+};
+
+

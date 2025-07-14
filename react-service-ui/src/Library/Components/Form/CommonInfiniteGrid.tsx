@@ -15,16 +15,6 @@ import { AVTUseEffect, AVTUseState } from "../../customHooks";
 import { API } from "../../services/API/api";
 import CommonButton from "./CommonButton";
 
-export interface FilterDto {
-  PageNo: number;
-  PageSize: number;
-  Predicates: Record<string, string | number | boolean>;
-  SortModels?: {
-    Field: string;
-    Sort: "asc" | "desc";
-  }[];
-  SearchText: string;
-}
 
 type CommonInfiniteGridProps<T> = {
   apiUrl: string;

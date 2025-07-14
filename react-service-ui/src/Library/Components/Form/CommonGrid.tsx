@@ -15,16 +15,7 @@ import { API } from "../../services/API/api";
 import CommonButton from "./CommonButton";
 import React from "react";
 
-export interface FilterDto {
-  PageNo: number;
-  PageSize: number;
-  Predicates: Record<string, string | number | boolean>;
-  SortModels?: {
-    Field: string;
-    Sort: "asc" | "desc";
-  }[];
-  SearchText: string;
-}
+
 
 type CommonGridProps<T> = {
   apiUrl: string;
