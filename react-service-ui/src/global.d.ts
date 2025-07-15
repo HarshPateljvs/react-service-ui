@@ -62,7 +62,7 @@ declare global {
         }[];
         SearchText: string;
     }
-    type CommonChartType = 'line' | 'bar' | 'pie' | 'area' | 'doughnut' | 'radar';
+    type CommonChartType = 'line' | 'bar' | 'pie' | 'area' | 'doughnut' | 'radar' |'stackedbar';
     interface CommonChart {
         type: CommonChartType;
         apiUrl: string;

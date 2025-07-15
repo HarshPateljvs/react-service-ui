@@ -9,6 +9,8 @@ const TeacherPanel = () => {
         <CommonChart type="bar" apiUrl={ChartAPI.BAR_CHART} />
         <CommonChart type="doughnut" apiUrl={ChartAPI.DONUT_CHART} />
         <CommonChart type="pie" apiUrl={ChartAPI.PIE_CHART} />
+        <CommonChart type="stackedbar" apiUrl={ChartAPI.STACKEDBAR_CHART} />
+
       </div>
     </>
   );

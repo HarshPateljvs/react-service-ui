@@ -29,6 +29,8 @@ export const ChartAPI = {
   BAR_CHART: REACTSERVICE + "Chart/GetBarChartData",
   DONUT_CHART: REACTSERVICE + "Chart/GetDonutChartData",
   PIE_CHART: REACTSERVICE + "Chart/GetPieChartData",
+  STACKEDBAR_CHART: REACTSERVICE + "Chart/GetStackedBarChartData",
+
 };
 
 

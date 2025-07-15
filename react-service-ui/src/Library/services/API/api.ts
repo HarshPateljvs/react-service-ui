@@ -30,7 +30,7 @@ const removeNulls = <T>(obj: T): T => {
     return obj.map(removeNulls) as T;
   } else if (obj !== null && typeof obj === "object") {
     return Object.entries(obj as Record<string, unknown>)
-      .filter(([_, v]) => v !== null)
+      .filter(([, value]) => value !== null)
       .reduce((acc, [k, v]) => {
         (acc as Record<string, unknown>)[k] = removeNulls(v);
         return acc;
