@@ -7,16 +7,20 @@ import { Provider } from "react-redux";
 import { persistor, store } from "./redux/store.ts";
 import { PersistGate } from "redux-persist/integration/react";
 import RouteLoader from "./Components/Routes/RouteLoader.tsx";
-
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import theme from "./theme/theme";
 createRoot(document.getElementById("root")!).render(
   <>
     <ToastContainer />
     <StrictMode>
-      <Provider store={store}>
-        <PersistGate loading={<RouteLoader/>} persistor={persistor}>
-          <App  />
-        </PersistGate>
-      </Provider>
+      <ThemeProvider theme={theme}>
+         <CssBaseline /> 
+        <Provider store={store}>
+          <PersistGate loading={<RouteLoader />} persistor={persistor}>
+            <App />
+          </PersistGate>
+        </Provider>
+      </ThemeProvider>
     </StrictMode>
   </>
 );
