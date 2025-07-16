@@ -8,14 +8,19 @@ import { useDispatch } from "react-redux";
 import { UserRole } from "../../../../Components/Routes/UserRole";
 import { AuthService } from "../../../../Components/Routes/AuthService";
 import Register from "./Register";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+interface LoginProps {
+  setRole: (role: UserRole) => void;
+}
+const Login = ({ setRole }: LoginProps) => {
   const [email, setEmail] = AVTUseState("login_email", "");
   const [password, setPassword] = AVTUseState("login_password", "");
   const [showRegister, setShowRegister] = AVTUseState("show_register", false);
   const [validate, setValidate] = AVTUseState("login_validate", false);
   const [loading, setLoading] = AVTUseState("login_loading", false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogin = async () => {
     setValidate(true);
     if (!email || !password) return;
@@ -28,8 +33,9 @@ const Login = () => {
       localStorage.setItem("access_token", response.Token);
       AuthService.setRole(response.AppUser.RoleId as UserRole);
       dispatch(setUser(response.AppUser));
-      window.location.href = "/Dashboard";
-      //navigate("/Dashboard");
+       setRole(response.AppUser.RoleId as UserRole);
+      //window.location.href = "/Dashboard";
+      navigate("/Dashboard");
     }
   };
 

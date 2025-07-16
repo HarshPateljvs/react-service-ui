@@ -13,10 +13,6 @@ const Layout1 = lazy(
 const Layout2 = lazy(
   () => import("../../Library/Components/Common/Layout2/Layout2")
 );
-
-const Login = lazy(
-  () => import("../../Library/Components/Common/Layout1/Login")
-);
 const Demoredux = lazy(() => import("../Master/User/Demoredux"));
 const UserList = lazy(() => import("../Master/User/UserList"));
 const AdminDashboard = lazy(() => import("../Master/Other/AdminDashboard"));
@@ -26,10 +22,6 @@ const EmployeeList = lazy(() => import("../Master/Employee/EmployeeList"));
 const Home = lazy(() => import("../Master/Other/Home"));
 
 export const AppRoutes: AppRoute[] = [
-  {
-    path: "/",
-    element: <Login />,
-  },
   {
     path: "/Dashboard",
     element: (

@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+body {
+  background-color: #f5f7fa; /* Light neutral background */
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', 'Roboto', sans-serif;
+}

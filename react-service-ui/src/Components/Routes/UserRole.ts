@@ -1,4 +1,5 @@
 export const UserRole = {
+  None: 0,
   Admin: 1,
   Teacher: 2,
   Student: 3,

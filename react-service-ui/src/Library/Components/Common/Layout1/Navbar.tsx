@@ -23,6 +23,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
 import { AVTUseState } from "../../../customHooks";
 import stylesnav from "./Navbar.module.css";
+import React from "react";
 interface NavRoute {
   path: string;
   label: string;
@@ -173,4 +174,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default React.memo(Navbar);
