@@ -6,7 +6,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import SchoolIcon from "@mui/icons-material/School";
 import HomeIcon from "@mui/icons-material/Home";
-
+import Groups3Icon from '@mui/icons-material/Groups3';
 const Layout1 = lazy(
   () => import("../../Library/Components/Common/Layout1/Layout1")
 );
@@ -37,13 +37,20 @@ export const AppRoutes: AppRoute[] = [
         <Layout1 />
       </ProtectedRoute>
     ),
-    showInNavbar: true,
     label: "Dashboard",
     icon: <DashboardIcon />,
     children: [
       {
         path: "", // this matches "/Dashboard"
         element: <Navigate to="home" replace />, // redirect to the default child
+      },
+      {
+        path: "home",
+        element: <Home />,
+        showInNavbar: true,
+        label: "Home",
+        allowedRoles: [UserRole.Student, UserRole.Admin],
+        icon: <HomeIcon />,
       },
       {
         path: "employee",
@@ -67,16 +74,9 @@ export const AppRoutes: AppRoute[] = [
         showInNavbar: true,
         label: "Student Home",
         allowedRoles: [UserRole.Student, UserRole.Admin],
-        icon: <HomeIcon />,
-      },
-      {
-        path: "home",
-        element: <Home />,
-        showInNavbar: false,
-        label: "Student Home",
-        allowedRoles: [UserRole.Student, UserRole.Admin],
-        icon: <HomeIcon />,
-      },
+        icon: <Groups3Icon />,
+      }
+      
     ],
   },
   {
