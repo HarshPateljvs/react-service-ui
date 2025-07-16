@@ -1,10 +1,18 @@
 import ReactECharts from "echarts-for-react";
 import { AVTUseEffect, AVTUseState } from "../../../Library/customHooks";
 import removeNulls, { API } from "../../../Library/services/API/api";
-import type { EChartsOption } from "echarts";
+import type { ECElementEvent, EChartsOption } from "echarts";
 import { Box, Skeleton, Typography } from "@mui/material";
+import { ToastService } from "../../services/toastService";
 
-const ChartLoader = ({ type, apiUrl, title, height, width }: CommonChart) => {
+const ChartLoader = ({
+  type,
+  apiUrl,
+  title,
+  filter,
+  height,
+  width,
+}: CommonChart) => {
   const [option, setOption] = AVTUseState<EChartsOption | null>(
     "common_chart_loader_option",
     null
@@ -13,62 +21,30 @@ const ChartLoader = ({ type, apiUrl, title, height, width }: CommonChart) => {
     "common_chart_loader_loading",
     true
   );
-
-  const staticOption = {
-    title: {
-      text: "Referer of a Website",
-      subtext: "Fake Data",
-      left: "center",
-    },
-    tooltip: {
-      trigger: "item",
-    },
-    legend: {
-      orient: "vertical",
-      left: "left",
-    },
-    series: [
-      {
-        name: "Access From",
-        type: "pie",
-        radius: "50%",
-        label: {
-          show: true,
-          formatter: "{b}: {c} ({d}%)",
-          position: "inside",
-        },
-        data: [
-          { value: 1048, name: "Search Engine" },
-          { value: 735, name: "Direct" },
-          { value: 580, name: "Email" },
-          { value: 484, name: "Union Ads" },
-          { value: 300, name: "Video Ads" },
-        ],
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.5)",
-          },
-        },
-      },
-    ],
+  const handleChartClick = (params: ECElementEvent) => {
+    console.log("Clicked Data:", params);
+    // 👉 Call your "secrifice" event here
+    ToastService.SUCCES(`You clicked on ${params.name} with value ${params.value}`);
   };
+  const onEvents = {
+  click: handleChartClick
+};
   const loadData = async () => {
     setLoading(true);
     try {
-      const filter: FilterDto = {
+      const filterlocal: FilterDto = {
         PageNo: 1,
         PageSize: 100,
         Predicates: {},
         SearchText: "",
         SortModels: [],
       };
-      const result = await API.POST<EChartsOption>(apiUrl, filter);
-      setOption(result);
+      const result = await API.POST<EChartsOption>(
+        apiUrl,
+        filter ?? filterlocal
+      );
       const cleanResult = removeNulls<EChartsOption>(result); // Type-safe here
-      console.log(result);
-        setOption(cleanResult);
+      setOption(cleanResult);
     } catch (error) {
       console.error("Chart API error", error);
     } finally {
@@ -81,7 +57,7 @@ const ChartLoader = ({ type, apiUrl, title, height, width }: CommonChart) => {
     () => {
       loadData();
     },
-    [apiUrl, type]
+    [apiUrl, type, filter?.Predicates]
   );
 
   if (loading) {
@@ -124,7 +100,7 @@ const ChartLoader = ({ type, apiUrl, title, height, width }: CommonChart) => {
     );
   }
 
-  return <ReactECharts option={option} style={{ height, width }} />;
+  return <ReactECharts option={option} style={{ height, width }}  onEvents={onEvents}/>;
 };
 
 export default ChartLoader;

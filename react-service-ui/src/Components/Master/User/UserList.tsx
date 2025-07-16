@@ -7,8 +7,6 @@ const UserList = () => {
       apiUrl={UserAPI.GET_ALL}
       updateUrl={UserAPI.UPDATE}
       showDelete
-      onEditClick={(user) => console.log("Edit user:", user)}
-      onDeleteClick={(user) => console.log("Delete user:", user)}
     />
   );
 };

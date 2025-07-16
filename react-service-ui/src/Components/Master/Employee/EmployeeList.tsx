@@ -17,7 +17,6 @@ export default function EmployeeList() {
       return;
     setLoading(true);
     const response = await API.POST<Employee>(EmployeeAPI.CREATE, newEmp);
-    console.log("api of add respons",response);
     setLoading(false);
     if (response) {
       setNewEmp({});

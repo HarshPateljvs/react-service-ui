@@ -1,12 +1,26 @@
 import React from "react";
 import ChartLoader from "./ChartLoader";
 
-const CommonChart: React.FC<CommonChart> = ({ type, apiUrl, title, height = "400px",width="423px" }) => {
+const CommonChartComponent: React.FC<CommonChart> = ({
+  type,
+  apiUrl,
+  title,
+  filter,
+  height = "100%",
+  width = "100%",
+}) => {
   return (
-    <div style={{ height,width }}>
-      <ChartLoader type={type} apiUrl={apiUrl} title={title} height={height} width={width} />
+    <div style={{ height, width }}>
+      <ChartLoader
+        type={type}
+        apiUrl={apiUrl}
+        title={title}
+        filter={filter}
+        height={height}
+        width={width}
+      />
     </div>
   );
 };
 
-export default CommonChart;
+export default React.memo(CommonChartComponent);

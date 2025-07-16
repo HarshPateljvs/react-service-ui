@@ -28,7 +28,7 @@ const CommonButton: React.FC<CommonButtonProps> = ({
   canSubmit = true,
 }) => {
   const handleClick = () => {
-    if (validateBeforeClick && !canSubmit) return; // ❌ Skip if validation fails
+    if (validateBeforeClick && !canSubmit) return;
     onClick();
   };
   return (

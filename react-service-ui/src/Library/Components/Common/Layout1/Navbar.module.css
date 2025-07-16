@@ -1,0 +1,94 @@
+.navbarWrapper {
+    position: fixed;
+    top: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    z-index: 1100;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.navbarWrapperMobile {
+    width: 95%;
+}
+
+.appBar {
+    background: transparent;
+    box-shadow: none;
+    min-height: 42px;
+}
+
+.appBarMobile {
+    min-height: 36px;
+}
+
+.toolbar {
+    min-height: 36px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.toolbarMobile {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.navLinks {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navLinksMobile {
+    gap: 4px;
+}
+
+.navLinkButton {
+    color: black;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    min-height: auto;
+    text-transform: none;
+    border-bottom: none;
+}
+
+.navLinkButtonActive {
+    font-weight: bold;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.6);
+}
+
+.navLinkButton:hover {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.3);
+}
+
+.logoutWrapper {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.drawerPaper {
+    width: 220px;
+}
+
+.offset {
+    height: 70px;
+}
+
+.offsetMobile {
+    height: 65px;
+}

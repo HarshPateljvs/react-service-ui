@@ -1,11 +1,11 @@
-import { AVTUseState } from "../../../Library/customHooks";
-import CommonInput from "../Form/CommonInput";
-import CommonButton from "../Form/CommonButton";
-import { API } from "../../../Library/services/API/api";
-import { AuthAPI } from "../../../URLS/Masters";
-import { ToastService } from "../../services/toastService";
-import { UserRole } from "../../../Components/Routes/UserRole";
-import CommonEnumDropdown from "../Form/CommonEnumDropdown";
+import { AVTUseState } from "../../../customHooks";
+import CommonInput from "../../Form/CommonInput";
+import CommonButton from "../../Form/CommonButton";
+import { API } from "../../../services/API/api";
+import { AuthAPI } from "../../../../URLS/Masters";
+import { ToastService } from "../../../services/toastService";
+import { UserRole } from "../../../../Components/Routes/UserRole";
+import CommonEnumDropdown from "../../Form/CommonEnumDropdown";
 
 const Register = ({ onBack }: { onBack: () => void }) => {
   const [firstName, setFirstName] = AVTUseState("reg_first_name", "");

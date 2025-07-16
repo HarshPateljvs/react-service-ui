@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 declare global {
     /*****************************///////////-----Types-----///////////////////*********************/
     type NavRoute = {
@@ -43,6 +45,7 @@ declare global {
         showInNavbar?: boolean;
         label?: string;
         allowedRoles?: UserRole[];
+        icon? : ReactNode ;
     }
     interface Employee {
         Id?: number;
@@ -62,13 +65,14 @@ declare global {
         }[];
         SearchText: string;
     }
-    type CommonChartType = 'line' | 'bar' | 'pie' | 'area' | 'doughnut' | 'radar' |'stackedbar';
+    type CommonChartType = 'line' | 'bar' | 'pie' | 'area' | 'doughnut' | 'radar' | 'stackedbar';
     interface CommonChart {
         type: CommonChartType;
         apiUrl: string;
         title?: string;
         height?: string;
         width?: string;
+        filter?: FilterDto;
 
     }
     /*****************************///////////-----InterFace-----///////////////////*********************/

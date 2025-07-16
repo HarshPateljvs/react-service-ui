@@ -1,12 +1,12 @@
-import { AVTUseState } from "../../../Library/customHooks";
-import { API } from "../../../Library/services/API/api";
-import { AuthAPI } from "../../../URLS/Masters";
-import CommonInput from "../Form/CommonInput";
-import CommonButton from "../Form/CommonButton";
-import { setUser } from "../../../redux/user/userSlice";
+import { AVTUseState } from "../../../customHooks";
+import { API } from "../../../services/API/api";
+import { AuthAPI } from "../../../../URLS/Masters";
+import CommonInput from "../../Form/CommonInput";
+import CommonButton from "../../Form/CommonButton";
+import { setUser } from "../../../../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import { UserRole } from "../../../Components/Routes/UserRole";
-import { AuthService } from "../../../Components/Routes/AuthService";
+import { UserRole } from "../../../../Components/Routes/UserRole";
+import { AuthService } from "../../../../Components/Routes/AuthService";
 import Register from "./Register";
 
 const Login = () => {
