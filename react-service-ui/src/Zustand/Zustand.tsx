@@ -1,7 +1,6 @@
 import { useCounterStore } from "./store";
 import CommonButton from "../Library/Components/Form/CommonButton";
 import ComponentLifecycle from "./componentlifecycle";
-import ddddddd from "../Zustand/demo";
 
 const secondincremntUpdate = () => {
   useCounterStore.setState((state) => ({
@@ -30,7 +29,6 @@ interface OtherComponentProps {
 const OtherComponent = ({ count, secondcount }: OtherComponentProps) => {
   const increment = useCounterStore((state) => state.increament);
   const decrement = useCounterStore((state) => state.decreament);
-ddddddd.use
   return (
     <>
       <div>First :{count}</div>
