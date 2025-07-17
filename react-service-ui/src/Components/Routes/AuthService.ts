@@ -1,5 +1,6 @@
 // src/utils/auth.ts
 
+import { ToastService } from "../../Library/services/toastService";
 import type { UserRole } from "./UserRole";
 
 
@@ -17,6 +18,6 @@ export const AuthService = {
   isAuthenticated: () => !!localStorage.getItem("access_token"),
   logout: () => {
     localStorage.clear();
-    window.location.href = "/";
+    ToastService.SUCCES("Logged out successfully");
   },
 };

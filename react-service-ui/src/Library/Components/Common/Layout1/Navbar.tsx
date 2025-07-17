@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 import { AppRoutes } from "../../../../Components/Routes/AppRoutes";
-import CommonButton from "../../Form/CommonButton";
 import type { UserRole } from "../../../../Components/Routes/UserRole";
 import { AuthService } from "../../../../Components/Routes/AuthService";
 import { useSelector } from "react-redux";
@@ -24,6 +23,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { AVTUseState } from "../../../customHooks";
 import stylesnav from "./Navbar.module.css";
 import React from "react";
+import LogoutButton from "./Logout";
 interface NavRoute {
   path: string;
   label: string;
@@ -67,10 +67,6 @@ const Navbar = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [open, setOpen] = AVTUseState("", false);
-
-  const handleLogout = () => {
-    AuthService.logout();
-  };
 
   const drawerContent = (
     <Box sx={{ width: 220 }} role="presentation" onClick={() => setOpen(false)}>
@@ -140,7 +136,7 @@ const Navbar = () => {
 
             {AuthService.isAuthenticated() && currentUser && (
               <Box className={stylesnav.logoutWrapper}>
-                <CommonButton onClick={handleLogout}>Logout</CommonButton>
+                <LogoutButton />
               </Box>
             )}
           </Toolbar>

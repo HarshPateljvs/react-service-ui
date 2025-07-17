@@ -66,11 +66,6 @@ class ComponentLifecycle extends Component<object, State> {
     return (
       <div>
         <AppBar position="static" sx={{ position: "relative" }}>
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              My App with Lifecycle Loader
-            </Typography>
-          </Toolbar>
           {this.renderLoader()}
         </AppBar>
 
