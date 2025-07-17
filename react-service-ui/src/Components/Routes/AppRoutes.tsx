@@ -7,12 +7,8 @@ import PeopleIcon from "@mui/icons-material/People";
 import SchoolIcon from "@mui/icons-material/School";
 import HomeIcon from "@mui/icons-material/Home";
 import Groups3Icon from '@mui/icons-material/Groups3';
-const Layout1 = lazy(
-  () => import("../../Library/Components/Common/Layout1/Layout1")
-);
-const Layout2 = lazy(
-  () => import("../../Library/Components/Common/Layout2/Layout2")
-);
+const Layout1 = lazy(() => import("../../Library/Components/Common/Layout1/Layout1"));
+//const Layout2 = lazy(() => import("../../Library/Components/Common/Layout2/Layout2"));
 const Demoredux = lazy(() => import("../Master/User/Demoredux"));
 const UserList = lazy(() => import("../Master/User/UserList"));
 const AdminDashboard = lazy(() => import("../Master/Other/AdminDashboard"));
@@ -20,6 +16,7 @@ const TeacherPanel = lazy(() => import("../Master/Other/TeacherPanel"));
 const StudentHome = lazy(() => import("../Master/Other/StudentHome"));
 const EmployeeList = lazy(() => import("../Master/Employee/EmployeeList"));
 const Home = lazy(() => import("../Master/Other/Home"));
+const Zustand = lazy(() => import("../../Zustand/Zustand"));
 
 export const AppRoutes: AppRoute[] = [
   {
@@ -66,6 +63,14 @@ export const AppRoutes: AppRoute[] = [
         showInNavbar: true,
         label: "Student Home",
         allowedRoles: [UserRole.Student, UserRole.Admin],
+        icon: <Groups3Icon />,
+      },
+      {
+        path: "zustand",
+        element: <Zustand />,
+        showInNavbar: true,
+        label: "Zustand Home",
+        allowedRoles: [UserRole.Admin],
         icon: <Groups3Icon />,
       }
       

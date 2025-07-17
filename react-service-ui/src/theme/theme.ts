@@ -10,6 +10,9 @@ const theme = createTheme({
     secondary: {
       main: "#9c27b0", // Your secondary color
     },
+    error: {
+      main: "#000000", // Your secondary color
+    },
     background: {
       default: "#f5f7fa", // Body background color
     },
@@ -21,6 +24,6 @@ const theme = createTheme({
       textTransform: "none",
     },
   },
-  });
+});
 
 export default theme;
