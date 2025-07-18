@@ -6,7 +6,7 @@ type CounterStore = {
     decreament:() => void;
 }
 
-export const useCounterStore = create<CounterStore>((set) => ({
+export const useCounterStore = create<CounterStore>((set,) => ({
     count: 0,
     secodCounter: 0,
     increament: () => set((state) => ({ count: state.count + 1 })),

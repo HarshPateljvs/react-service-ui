@@ -1,6 +1,6 @@
 import { Component } from "react";
 import LinearProgress from "@mui/material/LinearProgress";
-import { AppBar, Toolbar, Typography, Box } from "@mui/material";
+import { AppBar, Box } from "@mui/material";
 
 interface State {
   loadingProgress: number;

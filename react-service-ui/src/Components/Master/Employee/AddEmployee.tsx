@@ -1,5 +1,6 @@
 import CommonButton from "../../../Library/Components/Form/CommonButton";
 import CommonInput from "../../../Library/Components/Form/CommonInput";
+import CommonImageUpload from "../../../Library/Components/Form/ImageUploder/CommonImageUpload";
 
 const AddEmployee = ({
   employee,
@@ -54,7 +55,7 @@ const AddEmployee = ({
           required
         />
       </div>
-
+      <CommonImageUpload />
       <div className="mt-6 flex justify-end gap-4">
         <CommonButton variant="outlined" onClick={onCancel}>
           Cancel

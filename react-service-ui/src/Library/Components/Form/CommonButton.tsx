@@ -11,7 +11,7 @@ type CommonButtonProps = {
   disabled?: boolean;
   loading?: boolean;
   className?: string;
-  validateBeforeClick?: boolean; // 🔹 Optional validation trigger
+  validateBeforeClick?: boolean;
   canSubmit?: boolean;
 };
 

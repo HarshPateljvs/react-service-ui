@@ -11,7 +11,7 @@ const theme = createTheme({
       main: "#9c27b0", // Your secondary color
     },
     error: {
-      main: "#000000", // Your secondary color
+      main: "hsl(6, 78%, 57%)", // Your secondary color
     },
     background: {
       default: "#f5f7fa", // Body background color
