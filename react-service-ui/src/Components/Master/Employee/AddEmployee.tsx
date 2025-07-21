@@ -1,3 +1,4 @@
+import { useState } from "react";
 import CommonButton from "../../../Library/Components/Form/CommonButton";
 import CommonInput from "../../../Library/Components/Form/CommonInput";
 import CommonImageUpload from "../../../Library/Components/Form/ImageUploder/CommonImageUpload";
@@ -17,6 +18,8 @@ const AddEmployee = ({
   validate?: boolean;
   loading?: boolean;
 }) => {
+  const [images, setImages] = useState<string[]>([]);
+
   return (
     <div className="p-6 border rounded shadow bg-white">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -55,7 +58,14 @@ const AddEmployee = ({
           required
         />
       </div>
-      <CommonImageUpload />
+      <CommonImageUpload
+        isMulti={true}
+        isCropEnable={true}
+        isShowDelete={true}
+        isShowEdit={true}
+        onChange={(imgs) => setImages(imgs)}
+      />
+      
       <div className="mt-6 flex justify-end gap-4">
         <CommonButton variant="outlined" onClick={onCancel}>
           Cancel

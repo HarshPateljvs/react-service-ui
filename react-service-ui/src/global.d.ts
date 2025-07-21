@@ -45,7 +45,7 @@ declare global {
         showInNavbar?: boolean;
         label?: string;
         allowedRoles?: UserRole[];
-        icon? : ReactNode ;
+        icon?: ReactNode;
     }
     interface Employee {
         Id?: number;
@@ -75,6 +75,16 @@ declare global {
         filter?: FilterDto;
 
     }
+    // global.d.ts
+
+    interface ICommonImageUploadProps {
+        isMulti?: boolean;
+        isCropEnable?: boolean;
+        isShowDelete?: boolean;
+        isShowEdit?: boolean;
+        onChange?: (images: string[]) => void;
+    }
+
     /*****************************///////////-----InterFace-----///////////////////*********************/
     /*****************************///////////-----ENUMS-----///////////////////*********************/
 
