@@ -2,6 +2,8 @@ import { Box, IconButton } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import CommonImageCropperModal from "./CommonImageCropperModal";
 import { AVTUseState } from "../../../customHooks";
+import { useRef } from "react";
+import CommonButton from "../CommonButton";
 
 const CommonImageUpload = ({
   isMulti = false,
@@ -10,26 +12,55 @@ const CommonImageUpload = ({
   isShowEdit = true,
   onChange,
 }: ICommonImageUploadProps) => {
-const [images, setImages] = AVTUseState<string[]>("images_state", []);
-const [cropSrc, setCropSrc] = AVTUseState<string | null>("crop_src_state", null);
-const [openCropper, setOpenCropper] = AVTUseState<boolean>("open_cropper_state", false);
-const [editingIndex, setEditingIndex] = AVTUseState<number | null>("editing_index_state", null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [images, setImages] = AVTUseState<string[]>("images_state", []);
+  const [cropSrc, setCropSrc] = AVTUseState<string | null>(
+    "crop_src_state",
+    null
+  );
+  const [openCropper, setOpenCropper] = AVTUseState<boolean>(
+    "open_cropper_state",
+    false
+  );
+  const [editingIndex, setEditingIndex] = AVTUseState<number | null>(
+    "editing_index_state",
+    null
+  );
+  const [loading, setLoading] = AVTUseState<boolean>(
+    "upload_loading_state",
+    false
+  );
+
   const handleSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
+    setLoading(true);
+
+    const promises = Array.from(files).map((file) => {
+      return new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result as string);
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(promises).then((imagesBase64) => {
+      setLoading(false);
+
       if (isCropEnable) {
-        setCropSrc(reader.result as string);
+        // Only crop the first image if multiple selected with crop enabled.
+        setCropSrc(imagesBase64[0]);
         setEditingIndex(null);
-
         setOpenCropper(true);
       } else {
-        handleAddImage(reader.result as string);
+        const updatedImages = isMulti
+          ? [...images, ...imagesBase64]
+          : [imagesBase64[0]];
+        setImages(updatedImages);
+        onChange?.(updatedImages);
       }
-    };
-    reader.readAsDataURL(file);
+    });
   };
 
   const handleAddImage = (img: string) => {
@@ -46,7 +77,21 @@ const [editingIndex, setEditingIndex] = AVTUseState<number | null>("editing_inde
 
   return (
     <Box>
-      <input type="file" accept="image/*" onChange={handleSelectFile} />
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleSelectFile}
+        hidden
+        multiple={isMulti}
+      />
+      <CommonButton
+        onClick={() => fileInputRef.current?.click()}
+        loading={loading}
+      >
+        {loading ? "Uploading..." : "Upload Image"}
+      </CommonButton>
+
       <Box
         sx={{
           display: "flex",
@@ -57,7 +102,7 @@ const [editingIndex, setEditingIndex] = AVTUseState<number | null>("editing_inde
       >
         {images.map((img, index) => (
           <Box
-            key={img + index} 
+            key={img + index}
             sx={{
               position: "relative",
               width: 150,

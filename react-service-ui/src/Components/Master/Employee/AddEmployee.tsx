@@ -57,15 +57,13 @@ const AddEmployee = ({
           validateTrigger={validate}
           required
         />
+        <CommonImageUpload
+          onChange={(imgs) => setImages(imgs)}
+          isMulti={true}
+          isCropEnable={true}
+        />
       </div>
-      <CommonImageUpload
-        isMulti={true}
-        isCropEnable={true}
-        isShowDelete={true}
-        isShowEdit={true}
-        onChange={(imgs) => setImages(imgs)}
-      />
-      
+
       <div className="mt-6 flex justify-end gap-4">
         <CommonButton variant="outlined" onClick={onCancel}>
           Cancel

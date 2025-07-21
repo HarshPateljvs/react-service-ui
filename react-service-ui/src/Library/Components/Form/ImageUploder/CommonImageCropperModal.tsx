@@ -1,10 +1,11 @@
 import { useRef } from "react";
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
+import { Dialog, DialogActions, DialogContent } from "@mui/material";
 import ReactCrop from "react-image-crop";
 import type { Crop, PixelCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 import { canvasPreview } from "./canvasPreview";
 import { AVTUseEffect, AVTUseState } from "../../../customHooks";
+import CommonButton from "../CommonButton";
 interface IProps {
   open: boolean;
   imgSrc: string | null;
@@ -62,7 +63,6 @@ const [completedCrop, setCompletedCrop] = AVTUseState<PixelCrop | undefined>("co
           crop={crop}
           onChange={(_, percentCrop) => setCrop(percentCrop)}
           onComplete={(c) => setCompletedCrop(c)}
-          aspect={16 / 9}
         >
           <img
             ref={imgRef}
@@ -89,12 +89,12 @@ const [completedCrop, setCompletedCrop] = AVTUseState<PixelCrop | undefined>("co
 </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleSaveCrop} variant="contained">
+        <CommonButton onClick={handleSaveCrop} variant="contained">
           Save
-        </Button>
-        <Button onClick={onClose} variant="outlined">
+        </CommonButton>
+        <CommonButton onClick={onClose} variant="outlined">
           Cancel
-        </Button>
+        </CommonButton>
       </DialogActions>
     </Dialog>
   );
