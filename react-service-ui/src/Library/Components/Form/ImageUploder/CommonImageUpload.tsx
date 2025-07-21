@@ -14,22 +14,11 @@ const CommonImageUpload = ({
 }: ICommonImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [images, setImages] = AVTUseState<string[]>("images_state", []);
-  const [cropSrc, setCropSrc] = AVTUseState<string | null>(
-    "crop_src_state",
-    null
-  );
-  const [openCropper, setOpenCropper] = AVTUseState<boolean>(
-    "open_cropper_state",
-    false
-  );
-  const [editingIndex, setEditingIndex] = AVTUseState<number | null>(
-    "editing_index_state",
-    null
-  );
-  const [loading, setLoading] = AVTUseState<boolean>(
-    "upload_loading_state",
-    false
-  );
+  const [cropSrc, setCropSrc] = AVTUseState<string | null>("crop_src_state", null);
+  const [openCropper, setOpenCropper] = AVTUseState<boolean>("open_cropper_state", false);
+  const [editingIndex, setEditingIndex] = AVTUseState<number | null>("editing_index_state", null);
+  const [loading, setLoading] = AVTUseState<boolean>("upload_loading_state", false);
+  const [cropQueue, setCropQueue] = AVTUseState<string[]>("crop_queue_state", []);
 
   const handleSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -49,14 +38,12 @@ const CommonImageUpload = ({
       setLoading(false);
 
       if (isCropEnable) {
-        // Only crop the first image if multiple selected with crop enabled.
+        setCropQueue(imagesBase64);
         setCropSrc(imagesBase64[0]);
         setEditingIndex(null);
         setOpenCropper(true);
       } else {
-        const updatedImages = isMulti
-          ? [...images, ...imagesBase64]
-          : [imagesBase64[0]];
+        const updatedImages = isMulti ? [...images, ...imagesBase64] : [imagesBase64[0]];
         setImages(updatedImages);
         onChange?.(updatedImages);
       }
@@ -150,6 +137,7 @@ const CommonImageUpload = ({
         onClose={() => {
           setOpenCropper(false);
           setEditingIndex(null);
+          setCropQueue([]);
         }}
         onSave={(croppedImg) => {
           if (editingIndex !== null) {
@@ -161,7 +149,16 @@ const CommonImageUpload = ({
           } else {
             handleAddImage(croppedImg);
           }
-          setOpenCropper(false);
+
+          const [, ...remainingQueue] = cropQueue;
+          if (remainingQueue.length > 0) {
+            setCropQueue(remainingQueue);
+            setCropSrc(remainingQueue[0]);
+            setOpenCropper(true);
+          } else {
+            setCropQueue([]);
+            setOpenCropper(false);
+          }
         }}
       />
     </Box>
