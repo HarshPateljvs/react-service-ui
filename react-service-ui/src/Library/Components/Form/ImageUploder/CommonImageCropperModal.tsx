@@ -69,7 +69,7 @@ const [completedCrop, setCompletedCrop] = AVTUseState<PixelCrop | undefined>("co
             src={imgSrc}
             alt="Crop Preview"
             onLoad={onImageLoad}
-            style={{ width: "400px", height: "225px", objectFit: "cover" }}
+            //style={{ width: "400px", height: "225px", objectFit: "cover" }}
           />
         </ReactCrop>
       )}

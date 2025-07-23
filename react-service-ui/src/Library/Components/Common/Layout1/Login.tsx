@@ -27,6 +27,7 @@ const Login = ({ setRole }: LoginProps) => {
 
     setLoading(true);
     const payload: LoginRequest = { email, password };
+    try{
     const response = await API.POST<LoginResponse>(AuthAPI.LOGIN, payload);
     setLoading(false);
     if (response) {
@@ -37,6 +38,9 @@ const Login = ({ setRole }: LoginProps) => {
       //window.location.href = "/Dashboard";
       navigate("/Dashboard");
     }
+    }finally {
+      setLoading(false);
+    } 
   };
 
   if (showRegister) {

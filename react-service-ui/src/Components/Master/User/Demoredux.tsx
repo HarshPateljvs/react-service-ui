@@ -9,13 +9,11 @@ const Demoredux = () => {
   const handleLogin = () => {
     dispatch(
       setUser({
-        Id: 1,
-        Name: "Harsh",
+        FirstName: "Harsh",
         Email: "harsh@example.com",
         Password: "123",
         PhoneNumber: "7984304065",
-        Address: "1213232",
-        DateOfBirth: "2022-07-07",
+        LastName:"Patel"
       })
     );
   };
@@ -25,9 +23,9 @@ const Demoredux = () => {
 
   return (
     <div>
-      <h2>{currentUser?.Name}</h2>
-      {/* <CommonButton onClick={handleLogin}>Login</CommonButton>
-      <CommonButton onClick={handleLogout}>Logout </CommonButton> */}
+      <h2>{currentUser?.LastName}</h2>
+      <CommonButton onClick={handleLogin}>Login</CommonButton>
+      <CommonButton onClick={handleLogout}>Logout </CommonButton>
       <h1>Demo redux</h1>
     </div>
   );

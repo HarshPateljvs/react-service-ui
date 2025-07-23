@@ -14,7 +14,7 @@ type CommonInputProps = {
 
 const CommonInput: React.FC<CommonInputProps> = ({
   name,
-  value,
+  value,  
   onChange,
   placeholder = "",
   type = "text",
