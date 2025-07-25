@@ -1,5 +1,7 @@
 // Define the localhost once here
-export const LOCALHOST = 'http://localhost';
+export const LOCALHOST = import.meta.env.VITE_API_BASE;
+//export const LOCALHOST = 'http://www.reactserviceui.com';
+
 
 // Define ports per service
 export const BaseURL = {

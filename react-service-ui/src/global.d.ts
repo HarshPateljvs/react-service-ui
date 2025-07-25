@@ -53,6 +53,7 @@ declare global {
         Email: string;
         Department: string;
         Role: string;
+        EmployeeImages: ImageInfoRequest;
     }
 
     interface FilterDto {
@@ -82,7 +83,19 @@ declare global {
         isCropEnable?: boolean;
         isShowDelete?: boolean;
         isShowEdit?: boolean;
-        onChange?: (images: string[]) => void;
+        onChange?: (data: ImageInfoRequest) => void;
+        Folder: string;
+    }
+
+    interface ImageInfo {
+        SrNo: number;
+        ImageName: string;
+    }
+
+    interface ImageInfoRequest {
+        AddImages: ImageInfo[];
+        UpdateImages: ImageInfo[];
+        DeleteImages: ImageInfo[];
     }
 
     /*****************************///////////-----InterFace-----///////////////////*********************/

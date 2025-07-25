@@ -37,6 +37,7 @@ export default function EmployeeList() {
           loading={loading}
         />
       )}
+
       <CommonGrid<Employee>
         apiUrl={EmployeeAPI.GET_ALL}
         updateUrl={EmployeeAPI.UPDATE}

@@ -15,8 +15,6 @@ import { API } from "../../services/API/api";
 import CommonButton from "./CommonButton";
 import React from "react";
 
-
-
 type CommonGridProps<T> = {
   apiUrl: string;
   updateUrl?: string;
@@ -95,14 +93,52 @@ function CommonGrid<T extends { Id?: number | string; id?: number | string }>({
 
       // Generate columns even if data is empty
       const firstRow = fetchedData[0] || {};
-      const generatedColumns: GridColDef[] = Object.keys(firstRow).map(
-        (key) => ({
-          field: key,
-          headerName: key,
-          flex: 1,
-          editable: true,
-        })
-      );
+      const generatedColumns: GridColDef[] = Object.keys(firstRow).map((key) => {
+  // ✅ Handle EmployeeImages column with image thumbnails
+  if (key === "EmployeeImages") {
+    return {
+      field: key,
+      headerName: "Images",
+      flex: 2,
+      sortable: false,
+      filterable: false,
+      renderCell: (params: GridRenderCellParams<T>) => {
+        const imageInfoRequest = params.value as ImageInfoRequest;
+        const images = imageInfoRequest?.AddImages ?? [];
+
+        if (!images.length) return <span>No Images</span>;
+
+        return (
+          <div style={{ display: "flex", gap: 6, overflowX: "auto" }}>
+            {images.map((img, idx) => (
+              <img
+                key={idx}
+                src={img.ImageName}
+                alt={`img-${idx}`}
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  objectFit: "cover",
+                  borderRadius: "6px",
+                  border: "1px solid #ddd",
+                }}
+              />
+            ))}
+          </div>
+        );
+      },
+    };
+  }
+
+  // ✅ Default column render
+  return {
+    field: key,
+    headerName: key,
+    flex: 1,
+    editable: true,
+  };
+});
+
 
       if (showEdit || showDelete) {
         generatedColumns.push({

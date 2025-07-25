@@ -58,9 +58,12 @@ const AddEmployee = ({
           required
         />
         <CommonImageUpload
-          onChange={(imgs) => setImages(imgs)}
+          onChange={(imgRequest) =>
+            setEmployee({ ...employee, EmployeeImages: imgRequest })
+          }
           isMulti={true}
           isCropEnable={true}
+          Folder="Employee"
         />
       </div>
 
