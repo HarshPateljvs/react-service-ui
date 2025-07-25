@@ -50,7 +50,7 @@ const [completedCrop, setCompletedCrop] = AVTUseState<PixelCrop | undefined>("co
 
   const handleSaveCrop = () => {
     if (!canvasRef.current) return;
-    onSave(canvasRef.current.toDataURL("image/png"));
+    onSave(canvasRef.current.toDataURL());
   };
 
   return (

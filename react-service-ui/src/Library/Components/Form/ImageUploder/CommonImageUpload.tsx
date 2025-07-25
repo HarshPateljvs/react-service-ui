@@ -16,13 +16,29 @@ const CommonImageUpload = ({
 }: ICommonImageUploadProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [images, setImages] = AVTUseState<string[]>("images_state", []);
-  const [cropSrc, setCropSrc] = AVTUseState<string | null>("crop_src_state", null);
-  const [openCropper, setOpenCropper] = AVTUseState<boolean>("open_cropper_state", false);
-  const [editingIndex, setEditingIndex] = AVTUseState<number | null>("editing_index_state", null);
-  const [loading, setLoading] = AVTUseState<boolean>("upload_loading_state", false);
-  const [cropQueue, setCropQueue] = AVTUseState<string[]>("crop_queue_state", []);
+  const [cropSrc, setCropSrc] = AVTUseState<string | null>(
+    "crop_src_state",
+    null
+  );
+  const [openCropper, setOpenCropper] = AVTUseState<boolean>(
+    "open_cropper_state",
+    false
+  );
+  const [editingIndex, setEditingIndex] = AVTUseState<number | null>(
+    "editing_index_state",
+    null
+  );
+  const [loading, setLoading] = AVTUseState<boolean>(
+    "upload_loading_state",
+    false
+  );
+  const [cropQueue, setCropQueue] = AVTUseState<string[]>(
+    "crop_queue_state",
+    []
+  );
 
-  const getFileName = (url: string) => url.split("__").pop()?.split("/").pop() || "";
+  const getFileName = (url: string) =>
+    url.split("__").pop()?.split("/").pop() || "";
 
   const emitChange = (
     addImages: string[],
@@ -49,7 +65,7 @@ const CommonImageUpload = ({
       UpdateImages,
       DeleteImages,
     } as ImageInfoRequest;
-
+console.log("payload", payload);
     onChange?.(payload);
   };
 
@@ -80,6 +96,7 @@ const CommonImageUpload = ({
           if (url) {
             const updatedImages = isMulti ? [...images, url] : [url];
             setImages(updatedImages);
+            console.log("updatedImages", updatedImages);
             emitChange(updatedImages, [], []);
           }
         });
@@ -91,20 +108,25 @@ const CommonImageUpload = ({
 
   const handleUploadCroppedImage = async (base64Img: string) => {
     const blob = await (await fetch(base64Img)).blob();
-    const file = new File([blob], `cropped-${Date.now()}.png`, { type: "image/png" });
+    const file = new File([blob], `cropped-${Date.now()}.png`, {
+      type: "image/png",
+    });
 
     const res = await uploadFile(file, Folder);
     const url = res?.Data?.ImageProp?.OriginalImageURL;
     return url;
   };
 
-
   const handleRemoveImage = (index: number) => {
     const updated = images.filter((_, i) => i !== index);
     setImages(updated);
     emitChange(updated, [], [index]);
   };
-
+  const getSafeImageUrl = async (url: string): Promise<string> => {
+    const response = await fetch(url); // CORS must be enabled on server
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
+  };
   return (
     <Box>
       <input
@@ -153,8 +175,9 @@ const CommonImageUpload = ({
             {isShowEdit && (
               <IconButton
                 size="small"
-                onClick={() => {
-                  setCropSrc(img);
+                onClick={async () => {
+                  const safeUrl = await getSafeImageUrl(img);
+                  setCropSrc(safeUrl);
                   setEditingIndex(index);
                   setOpenCropper(true);
                 }}
